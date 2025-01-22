@@ -2,21 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PumpyTrump - The Memecoin Revolution</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      background-color: #f4f4f9;
-      color: #333;
-    }
-    header {
-      background: linear-gradient(90deg, #ff8c00, #ffa500, #ff4500);
-      color: white;
-      text-align: center;
-      padding: 20px;
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"
     }
     header h1 {
       font-size: 3em;
