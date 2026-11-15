@@ -1,0 +1,590 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reiskocher TikTok Ad</title>
+<style>
+  html, body { margin: 0; height: 100%; background: #000; }
+  body { display: flex; align-items: center; justify-content: center; }
+  canvas { height: 100vh; max-width: 100vw; aspect-ratio: 9 / 16; display: block; }
+</style>
+</head>
+<body>
+<canvas id="c" width="1080" height="1920"></canvas>
+<script>
+/*
+ * 20-second 9:16 TikTok Shop ad for the rice cooker & steamer, starring a stick figure.
+ *   0.0 – 3.5  Pot boils over on the stove              "Reis kocht schon WIEDER über?!"
+ *   3.5 – 7.0  Burnt rice, smoke, coughing              "...und unten alles ANGEBRANNT"
+ *   7.0 – 11.0 Reveal: rice cooker & steamer            "Die Lösung: Reiskocher & Dampfgarer"
+ *  11.0 – 15.0 Rice + water in, press button, perfect rice
+ *  15.0 – 18.0 Features + 3 colours
+ *  18.0 – 20.0 CTA: Black Friday price, free wash bowl, TikTok Shop
+ * window.renderFrame(t) draws the frame at t seconds; render.js exports the MP4.
+ */
+const W = 1080, H = 1920, DUR = 20;
+const cv = document.getElementById('c');
+const ctx = cv.getContext('2d');
+const FONT = '"Arial Black", "DejaVu Sans", "Liberation Sans", sans-serif';
+const INK = '#16161d';
+const PINK = '#fe2c55', CYAN = '#25f4ee';
+
+// ---------- helpers ----------
+const clamp = (v, a = 0, b = 1) => Math.max(a, Math.min(b, v));
+const lerp = (a, b, t) => a + (b - a) * t;
+const prog = (t, a, b) => clamp((t - a) / (b - a));
+const ease = t => t < .5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+const outBack = t => { const c1 = 1.9, c3 = c1 + 1; return 1 + c3 * Math.pow(t - 1, 3) + c1 * Math.pow(t - 1, 2); };
+const rnd = s => { const x = Math.sin(s * 127.1) * 43758.5453; return x - Math.floor(x); };
+
+function rr(x, y, w, h, r) {
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.arcTo(x + w, y, x + w, y + h, r);
+  ctx.arcTo(x + w, y + h, x, y + h, r);
+  ctx.arcTo(x, y + h, x, y, r);
+  ctx.arcTo(x, y, x + w, y, r);
+  ctx.closePath();
+}
+function line(pts) {
+  ctx.beginPath();
+  ctx.moveTo(pts[0][0], pts[0][1]);
+  for (let i = 1; i < pts.length; i++) ctx.lineTo(pts[i][0], pts[i][1]);
+  ctx.stroke();
+}
+const limb = (p, a, len) => [p[0] + Math.sin(a) * len, p[1] + Math.cos(a) * len];
+
+// TikTok-style caption: white text, heavy black outline, pop-in.
+function caption(text, y, size, t0, t, opts = {}) {
+  const p = prog(t, t0, t0 + 0.35);
+  if (p <= 0) return;
+  const sc = outBack(p);
+  ctx.save();
+  ctx.translate(W / 2, y);
+  ctx.scale(sc, sc);
+  ctx.rotate(opts.rot || 0);
+  ctx.font = `900 ${size}px ${FONT}`;
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.lineJoin = 'round';
+  const lines = text.split('\n');
+  lines.forEach((ln, i) => {
+    const ly = (i - (lines.length - 1) / 2) * size * 1.15;
+    if (opts.box) {
+      const w = ctx.measureText(ln).width + size * 0.8;
+      ctx.fillStyle = opts.box;
+      rr(-w / 2, ly - size * 0.68, w, size * 1.36, size * 0.3);
+      ctx.fill();
+      ctx.fillStyle = opts.color || INK;
+      ctx.fillText(ln, 0, ly + size * 0.04);
+    } else {
+      ctx.lineWidth = size * 0.22;
+      ctx.strokeStyle = opts.stroke || '#000';
+      ctx.strokeText(ln, 0, ly);
+      ctx.fillStyle = opts.color || '#fff';
+      ctx.fillText(ln, 0, ly);
+    }
+  });
+  ctx.restore();
+}
+
+// ---------- stick figure ----------
+// Angles: 0 = pointing down, PI = pointing up, +PI/2 = towards +x.
+function stick(o) {
+  const s = o.s || 1, rot = o.rot || 0, p = o.pose;
+  const cos = Math.cos(rot), sin = Math.sin(rot);
+  const toWorld = q => [o.x + s * (q[0] * cos - q[1] * sin), o.y + s * (q[0] * sin + q[1] * cos)];
+  ctx.save();
+  ctx.translate(o.x, o.y);
+  ctx.rotate(rot);
+  ctx.scale(s, s);
+  ctx.strokeStyle = o.color || INK;
+  ctx.lineWidth = 15;
+  ctx.lineCap = 'round';
+  ctx.lineJoin = 'round';
+  const hip = [0, 0], sh = [0, -150], neck = [0, -172];
+  if (!o.noLegs) {
+    for (const [u, l] of [[p.lUL || 0, p.lLL || 0], [p.rUL || 0, p.rLL || 0]]) {
+      const k = limb(hip, u, 115);
+      line([hip, k, limb(k, l, 115)]);
+    }
+  }
+  line([hip, neck]);
+  const le = limb(sh, p.lUA, 95), lh = limb(le, p.lLA, 90);
+  const re = limb(sh, p.rUA, 95), rh = limb(re, p.rLA, 90);
+  line([sh, le, lh]);
+  line([sh, re, rh]);
+  if (o.band) { // fitness band on right forearm
+    const a = Math.atan2(rh[1] - re[1], rh[0] - re[0]);
+    const bp = [lerp(re[0], rh[0], .7), lerp(re[1], rh[1], .7)];
+    ctx.save();
+    ctx.translate(bp[0], bp[1]);
+    ctx.rotate(a);
+    ctx.fillStyle = o.bandColor || '#111';
+    rr(-17, -16, 34, 32, 8); ctx.fill();
+    ctx.fillStyle = o.bandGlow ? '#fff' : '#9aa';
+    ctx.shadowColor = '#fff'; ctx.shadowBlur = o.bandGlow ? 18 : 0;
+    rr(-8, -9, 16, 18, 3); ctx.fill();
+    ctx.restore();
+  }
+  // head
+  const hc = [0, -236], R = 62;
+  ctx.fillStyle = o.headFill || '#fff';
+  ctx.beginPath(); ctx.arc(hc[0], hc[1], R, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+  if (o.hair === 'spiky') {
+    ctx.lineWidth = 10;
+    for (let i = -3; i <= 3; i++) {
+      const a = Math.PI + i * 0.3;
+      const b = limb(hc, a, R + 4), e = limb(hc, a + (rnd(i + (o.seed || 0)) - .5) * .4, R + 42);
+      line([b, e]);
+    }
+  }
+  ctx.lineWidth = 9;
+  ctx.fillStyle = o.color || INK;
+  const ey = hc[1] - 10;
+  if (o.eyes === 'closed') {
+    for (const ex of [-22, 22]) { ctx.beginPath(); ctx.arc(ex, ey, 11, 0.15 * Math.PI, 0.85 * Math.PI); ctx.stroke(); }
+  } else if (o.eyes === 'happy') {
+    for (const ex of [-22, 22]) { ctx.beginPath(); ctx.arc(ex, ey + 6, 12, 1.15 * Math.PI, 1.85 * Math.PI); ctx.stroke(); }
+  } else if (o.eyes === 'wide') {
+    for (const ex of [-24, 24]) {
+      ctx.lineWidth = 6; ctx.fillStyle = '#fff';
+      ctx.beginPath(); ctx.arc(ex, ey - 4, 18, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+      ctx.fillStyle = o.color || INK;
+      ctx.beginPath(); ctx.arc(ex, ey - 4, 7, 0, Math.PI * 2); ctx.fill();
+    }
+  } else {
+    for (const ex of [-22, 22]) { ctx.beginPath(); ctx.arc(ex, ey, 8, 0, Math.PI * 2); ctx.fill(); }
+  }
+  ctx.lineWidth = 8;
+  const my = hc[1] + 26;
+  if (o.mouth === 'o') { ctx.beginPath(); ctx.ellipse(0, my, 13, 19, 0, 0, Math.PI * 2); ctx.stroke(); }
+  else if (o.mouth === 'smile') { ctx.beginPath(); ctx.arc(0, my - 14, 26, 0.18 * Math.PI, 0.82 * Math.PI); ctx.stroke(); }
+  else if (o.mouth === 'grin') {
+    ctx.fillStyle = o.color || INK;
+    ctx.beginPath(); ctx.arc(0, my - 8, 28, 0, Math.PI); ctx.closePath(); ctx.fill();
+  }
+  else if (o.mouth === 'frown') { ctx.beginPath(); ctx.arc(0, my + 18, 22, 1.2 * Math.PI, 1.8 * Math.PI); ctx.stroke(); }
+  else { line([[-16, my], [16, my]]); }
+  if (o.brows) {
+    ctx.lineWidth = 7;
+    line([[-38, ey - 30], [-10, ey - 20]]);
+    line([[38, ey - 30], [10, ey - 20]]);
+  }
+  ctx.restore();
+  return { rHand: toWorld(rh), lHand: toWorld(lh), head: toWorld(hc), rElbow: toWorld(re) };
+}
+
+function bolt(x, y, s, r) {
+  ctx.save(); ctx.translate(x, y); ctx.rotate(r); ctx.scale(s, s);
+  ctx.fillStyle = '#ff2a2a';
+  ctx.beginPath();
+  ctx.moveTo(-10, -60); ctx.lineTo(30, -60); ctx.lineTo(8, -12); ctx.lineTo(34, -12);
+  ctx.lineTo(-22, 66); ctx.lineTo(-4, 6); ctx.lineTo(-30, 6); ctx.closePath();
+  ctx.fill();
+  ctx.restore();
+}
+function shade(hex, amt) {
+  const n = parseInt(hex.slice(1), 16);
+  let r = n >> 16, g = (n >> 8) & 255, b = n & 255;
+  const f = c => Math.round(amt < 0 ? c * (1 + amt) : c + (255 - c) * amt);
+  return `rgb(${f(r)},${f(g)},${f(b)})`;
+}
+function star(x, y, r, a) {
+  ctx.save(); ctx.translate(x, y); ctx.rotate(a);
+  ctx.beginPath();
+  for (let i = 0; i < 8; i++) { const rad = i % 2 ? r * 0.38 : r; const an = i * Math.PI / 4; ctx.lineTo(Math.cos(an) * rad, Math.sin(an) * rad); }
+  ctx.closePath(); ctx.fill(); ctx.restore();
+}
+
+
+// ---------- props ----------
+const COOKERS = {
+  black: { body: '#1c1c20', lid: '#26262b', panel: '#111114', ring: '#3a3a40' },
+  white: { body: '#f4f4f6', lid: '#ffffff', panel: '#5a2a4e', ring: '#7a3a6a' },
+  grey:  { body: '#5d6268', lid: '#6b7076', panel: '#3e4246', ring: '#55595e' }
+};
+// Rice cooker drawn around its base centre (x, y). o.open: 0..1 lid angle, o.light: 'cook'|'warm'|null
+function riceCooker(x, y, s, col, o = {}) {
+  const c = COOKERS[col];
+  ctx.save(); ctx.translate(x, y); ctx.scale(s, s);
+  // shadow
+  ctx.fillStyle = 'rgba(0,0,0,0.18)';
+  ctx.beginPath(); ctx.ellipse(0, 4, 190, 26, 0, 0, Math.PI * 2); ctx.fill();
+  // body
+  const g = ctx.createLinearGradient(-170, 0, 170, 0);
+  g.addColorStop(0, shadeSafe(c.body, -0.15));
+  g.addColorStop(0.35, shadeSafe(c.body, 0.12));
+  g.addColorStop(1, shadeSafe(c.body, -0.25));
+  ctx.fillStyle = g;
+  rr(-165, -250, 330, 250, 60); ctx.fill();
+  // feet
+  ctx.fillStyle = shadeSafe(c.body, -0.4);
+  rr(-140, -8, 60, 12, 6); ctx.fill(); rr(80, -8, 60, 12, 6); ctx.fill();
+  // side handles
+  ctx.fillStyle = shadeSafe(c.body, -0.3);
+  rr(-185, -200, 28, 70, 10); ctx.fill(); rr(157, -200, 28, 70, 10); ctx.fill();
+  // open: inner pot + rice
+  const open = o.open || 0;
+  if (open > 0.05) {
+    ctx.fillStyle = '#2b2b2f';
+    ctx.beginPath(); ctx.ellipse(0, -250, 150, 34, 0, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = '#c9ccd2';
+    ctx.beginPath(); ctx.ellipse(0, -250, 138, 28, 0, 0, Math.PI * 2); ctx.fill();
+    if (o.rice) {
+      ctx.fillStyle = '#ffffff';
+      ctx.beginPath(); ctx.ellipse(0, -252, 128, 22 + o.rice * 8, 0, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = '#ece7da';
+      for (let i = 0; i < 26; i++) {
+        const a = rnd(i) * Math.PI * 2, r = rnd(i + 40) * 0.9;
+        ctx.beginPath(); ctx.ellipse(Math.cos(a) * 118 * r, -252 + Math.sin(a) * 20 * r, 7, 3, a, 0, Math.PI * 2); ctx.fill();
+      }
+    }
+  }
+  // lid (hinged at back-right)
+  ctx.save();
+  ctx.translate(140, -262);
+  ctx.rotate(-open * 1.9);
+  ctx.translate(-140, 262);
+  ctx.fillStyle = c.lid;
+  ctx.beginPath();
+  ctx.moveTo(-170, -245);
+  ctx.bezierCurveTo(-165, -330, 165, -330, 170, -245);
+  ctx.closePath(); ctx.fill();
+  ctx.fillStyle = shadeSafe(c.lid, 0.25);
+  ctx.beginPath(); ctx.ellipse(-60, -300, 70, 12, -0.15, 0, Math.PI * 2); ctx.fill();
+  ctx.fillStyle = shadeSafe(c.body, -0.35);
+  rr(-45, -335, 90, 22, 11); ctx.fill(); // carry handle
+  ctx.fillStyle = col === 'white' ? c.panel : shadeSafe(c.lid, -0.4);
+  rr(-170, -252, 340, 14, 7); ctx.fill(); // lid rim
+  ctx.restore();
+  // front control panel
+  ctx.fillStyle = c.ring;
+  ctx.beginPath(); ctx.arc(0, -115, 62, 0, Math.PI * 2); ctx.fill();
+  ctx.fillStyle = c.panel;
+  ctx.beginPath(); ctx.arc(0, -115, 52, 0, Math.PI * 2); ctx.fill();
+  for (const [lx, on, colr] of [[-18, o.light === 'cook', '#ff3030'], [18, o.light === 'warm', '#ff9a1f']]) {
+    ctx.fillStyle = on ? colr : shadeSafe(colr, -0.55);
+    ctx.shadowColor = colr; ctx.shadowBlur = on ? 18 : 0;
+    rr(lx - 10, -140, 20, 7, 3); ctx.fill();
+    ctx.shadowBlur = 0;
+  }
+  ctx.fillStyle = '#e9e9ee';
+  rr(-20, -112 + (o.pressed ? 14 : 0), 40, 26, 6); ctx.fill(); // switch lever
+  ctx.restore();
+}
+function shadeSafe(hex, amt) { return shade(hex, amt); }
+
+function steam(x, y, t, s = 1, alpha = 0.8) {
+  for (let i = 0; i < 6; i++) {
+    const ph = (t * 0.7 + i / 6) % 1;
+    ctx.globalAlpha = alpha * Math.sin(ph * Math.PI);
+    ctx.fillStyle = '#ffffff';
+    const px = x + Math.sin(ph * 6 + i) * 40 * s + (i - 2.5) * 22 * s;
+    ctx.beginPath(); ctx.arc(px, y - ph * 280 * s, (24 + ph * 40) * s, 0, Math.PI * 2); ctx.fill();
+  }
+  ctx.globalAlpha = 1;
+}
+function smoke(x, y, t, s = 1) {
+  for (let i = 0; i < 9; i++) {
+    const ph = (t * 0.45 + i / 9) % 1;
+    ctx.globalAlpha = 0.75 * Math.sin(ph * Math.PI);
+    ctx.fillStyle = i % 2 ? '#55575c' : '#3d3f44';
+    const px = x + Math.sin(ph * 5 + i * 2) * 70 * s + (i - 4) * 18 * s;
+    ctx.beginPath(); ctx.arc(px, y - ph * 520 * s, (40 + ph * 90) * s, 0, Math.PI * 2); ctx.fill();
+  }
+  ctx.globalAlpha = 1;
+}
+function kitchenBg(dim) {
+  ctx.fillStyle = dim ? '#c9c6c0' : '#f7f1e8'; ctx.fillRect(0, 0, W, H);
+  ctx.strokeStyle = dim ? '#b5b1aa' : '#e8dfd1'; ctx.lineWidth = 4;
+  for (let y = 700; y < 1300; y += 90) line([[0, y], [W, y]]);
+  for (let y = 700, r = 0; y < 1300; y += 90, r++) for (let x = (r % 2) * 60; x < W; x += 120) line([[x, y], [x, y + 90]]);
+  // counter
+  ctx.fillStyle = dim ? '#8b7d6c' : '#b89b7a'; ctx.fillRect(0, 1300, W, 40);
+  ctx.fillStyle = dim ? '#6d6257' : '#8f7559'; ctx.fillRect(0, 1340, W, H - 1340);
+  ctx.fillStyle = dim ? '#5c534a' : '#7a634b';
+  for (let x = 40; x < W; x += 340) { rr(x, 1400, 300, 380, 14); ctx.fill(); }
+}
+function stove(x, y, t, fire) {
+  ctx.fillStyle = '#2d2f35'; rr(x - 230, y, 460, 40, 10); ctx.fill();
+  if (fire) {
+    for (let i = 0; i < 9; i++) {
+      const fx = x - 120 + i * 30, h = 34 + Math.sin(t * 30 + i * 2) * 12;
+      ctx.fillStyle = i % 2 ? '#2a7fff' : '#59b4ff';
+      ctx.beginPath(); ctx.moveTo(fx - 12, y); ctx.quadraticCurveTo(fx, y - h * 1.6, fx + 12, y); ctx.fill();
+    }
+  }
+}
+// pot sitting on (x, y). foam: 0..1 overflow amount, burnt shading
+function pot(x, y, t, foam, burnt) {
+  const rattle = foam > 0 ? Math.sin(t * 45) * 6 * foam : 0;
+  ctx.fillStyle = burnt ? '#7c3b2a' : '#e2483d';
+  rr(x - 190, y - 230, 380, 230, 30); ctx.fill();
+  ctx.fillStyle = 'rgba(255,255,255,0.18)'; rr(x - 160, y - 210, 60, 180, 30); ctx.fill();
+  ctx.fillStyle = '#333'; rr(x - 250, y - 200, 70, 24, 12); ctx.fill(); rr(x + 180, y - 200, 70, 24, 12); ctx.fill();
+  // lid
+  ctx.save(); ctx.translate(x, y - 232 - Math.abs(rattle) * 2); ctx.rotate(rattle * 0.01);
+  ctx.fillStyle = burnt ? '#6a3426' : '#c93a31';
+  ctx.beginPath(); ctx.ellipse(0, 0, 205, 34, 0, Math.PI, Math.PI * 2); ctx.fill();
+  ctx.fillStyle = '#333'; rr(-30, -58, 60, 26, 12); ctx.fill();
+  ctx.restore();
+  if (foam > 0) {
+    ctx.fillStyle = '#fbfbf6';
+    for (let i = 0; i < 12; i++) {
+      const fx = x - 200 + i * 36;
+      ctx.beginPath(); ctx.arc(fx, y - 228 + Math.sin(t * 8 + i) * 5, 26 + rnd(i) * 14, 0, Math.PI * 2); ctx.fill();
+    }
+    // drips running down
+    for (let i = 0; i < 6; i++) {
+      const dx = x - 185 + i * 74, len = foam * (60 + rnd(i + 3) * 150) * (0.6 + 0.4 * Math.sin(t * 2 + i));
+      rr(dx - 14, y - 230, 28, len, 14); ctx.fill();
+      ctx.beginPath(); ctx.arc(dx, y - 230 + len, 17, 0, Math.PI * 2); ctx.fill();
+    }
+  }
+}
+function chip(label, x, y, p, col) {
+  if (p <= 0) return;
+  ctx.save(); ctx.translate(x, y); ctx.scale(p, p);
+  ctx.font = `900 36px ${FONT}`;
+  const w = Math.max(440, ctx.measureText(label).width + 110);
+  ctx.fillStyle = '#fff'; ctx.shadowColor = 'rgba(0,0,0,.18)'; ctx.shadowBlur = 20; ctx.shadowOffsetY = 6;
+  rr(-w / 2, -42, w, 84, 42); ctx.fill();
+  ctx.shadowColor = 'transparent';
+  ctx.fillStyle = col; ctx.beginPath(); ctx.arc(-w / 2 + 44, 0, 20, 0, Math.PI * 2); ctx.fill();
+  ctx.strokeStyle = '#fff'; ctx.lineWidth = 6; ctx.lineCap = 'round';
+  line([[-w / 2 + 35, 0], [-w / 2 + 42, 8], [-w / 2 + 54, -8]]);
+  ctx.fillStyle = INK; ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
+  ctx.fillText(label, -w / 2 + 76, 2);
+  ctx.restore();
+}
+function bowl(x, y, s) { // stainless rice-wash bowl icon
+  ctx.save(); ctx.translate(x, y); ctx.scale(s, s);
+  const g = ctx.createLinearGradient(-90, 0, 90, 0);
+  g.addColorStop(0, '#8d939b'); g.addColorStop(0.4, '#eef1f4'); g.addColorStop(1, '#7b8189');
+  ctx.fillStyle = g;
+  ctx.beginPath(); ctx.moveTo(-95, -40); ctx.quadraticCurveTo(-85, 50, 0, 55); ctx.quadraticCurveTo(85, 50, 95, -40); ctx.closePath(); ctx.fill();
+  ctx.fillStyle = '#d5d9de'; ctx.beginPath(); ctx.ellipse(0, -40, 95, 18, 0, 0, Math.PI * 2); ctx.fill();
+  ctx.fillStyle = '#555b62';
+  for (let i = 0; i < 14; i++) { ctx.beginPath(); ctx.arc(-60 + (i % 7) * 20, -5 + Math.floor(i / 7) * 18, 3, 0, Math.PI * 2); ctx.fill(); }
+  ctx.fillStyle = '#222'; rr(-40, 50, 80, 14, 7); ctx.fill();
+  ctx.restore();
+}
+
+// ---------- scenes ----------
+function scene1(t) { // 0 – 3.5  overflowing pot
+  kitchenBg(false);
+  stove(650, 1260, t, true);
+  pot(650, 1260, t, ease(prog(t, 0.2, 1.6)), false);
+  steam(650, 980, t, 1, 0.6);
+  const panic = Math.sin(t * 14) * 0.15;
+  stick({
+    x: 230, y: 1300 - 230, s: 1,
+    pose: { lUA: Math.PI - 0.35 + panic, lLA: Math.PI + 0.6, rUA: -(Math.PI - 0.35) - panic, rLA: -(Math.PI + 0.6), lUL: -0.2, lLL: -0.1, rUL: 0.2, rLL: 0.1 },
+    eyes: 'wide', mouth: 'o', hair: 'spiky', seed: Math.floor(t * 6)
+  });
+  caption('Reis kocht schon\nWIEDER über?!', 420, 96, 0.15, t);
+}
+
+function scene2(t) { // 3.5 – 7.0  burnt rice
+  const lt = t - 3.5;
+  kitchenBg(true);
+  stove(650, 1260, t, false);
+  pot(650, 1260, t, 0, true);
+  smoke(650, 1000, t, 1.1);
+  const wave = Math.sin(t * 12);
+  stick({
+    x: 230, y: 1070, s: 1,
+    pose: { lUA: -0.2, lLA: -0.1, rUA: 2.2 + wave * 0.4, rLA: 2.7 + wave * 0.5, lUL: -0.2, lLL: -0.1, rUL: 0.2, rLL: 0.1 },
+    eyes: 'closed', mouth: 'frown', brows: true
+  });
+  if (lt > 0.6) {
+    ctx.font = `900 52px ${FONT}`; ctx.textAlign = 'center';
+    ctx.lineWidth = 10; ctx.strokeStyle = '#fff';
+    const jx = Math.sin(t * 30) * 4;
+    ctx.strokeText('*hust*', 230 + jx, 740); ctx.fillStyle = INK; ctx.fillText('*hust*', 230 + jx, 740);
+  }
+  caption('...und unten alles\nANGEBRANNT', 380, 96, 3.6, t, { color: '#ff7a1a', stroke: '#000' });
+  caption('Schon wieder.', 610, 64, 5.0, t, { box: INK, color: '#fff' });
+}
+
+function scene3(t) { // 7.0 – 11.0  reveal
+  const lt = t - 7;
+  ctx.fillStyle = '#8ec0f7'; ctx.fillRect(0, 0, W, H);
+  ctx.save(); ctx.translate(W / 2, 1100); ctx.rotate(t * 0.2);
+  ctx.fillStyle = 'rgba(255,255,255,0.28)';
+  for (let i = 0; i < 14; i++) {
+    ctx.rotate(Math.PI * 2 / 14);
+    ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(-70, -1600); ctx.lineTo(70, -1600); ctx.closePath(); ctx.fill();
+  }
+  ctx.restore();
+  ctx.fillStyle = 'rgba(30,60,110,0.25)';
+  ctx.beginPath(); ctx.ellipse(W / 2 + 120, 1420, 330, 50, 0, 0, Math.PI * 2); ctx.fill();
+  const p = outBack(prog(lt, 0.15, 0.7));
+  if (p > 0) {
+    riceCooker(W / 2 + 120, 1410, 1.35 * p, 'black', { open: ease(prog(lt, 1.2, 1.9)) * 0.85, light: 'warm' });
+    if (lt > 1.6) steam(W / 2 + 120, 1030, t, 1.1, 0.75);
+    ctx.fillStyle = '#ffe14d';
+    for (let i = 0; i < 6; i++) {
+      const a = i * Math.PI / 3 + lt * 1.3;
+      star(W / 2 + 120 + Math.cos(a) * 300, 1180 + Math.sin(a) * 220, 20 * p, lt * 2 + i);
+    }
+  }
+  stick({
+    x: 170, y: 1420, s: 1.05,
+    pose: { lUA: -0.3, lLA: -0.15, rUA: 1.75, rLA: 2.0, lUL: -0.2, lLL: -0.1, rUL: 0.2, rLL: 0.1 },
+    eyes: 'happy', mouth: 'grin'
+  });
+  caption('Die Lösung:', 300, 84, 7.1, t, { color: INK, stroke: '#fff' });
+  caption('Reiskocher & Dampfgarer', 420, 62, 7.45, t, { box: PINK, color: '#fff' });
+  caption('mit Keramikbeschichtung', 540, 60, 8.0, t, { box: '#fff', color: INK });
+}
+
+function scene4(t) { // 11.0 – 15.0  how easy it is
+  const lt = t - 11;
+  kitchenBg(false);
+  const cx = 650, cy = 1300;
+  const pressed = lt > 1.4;
+  const done = lt > 2.6;
+  const openAmt = lt < 1.1 ? 0.85 : lt < 1.35 ? lerp(0.85, 0, ease(prog(lt, 1.1, 1.35))) : done ? 0.85 * ease(prog(lt, 2.6, 3.0)) : 0;
+  riceCooker(cx, cy, 1.15, 'black', { open: openAmt, rice: done ? 1 : (lt < 1.1 ? 0.2 : 0), pressed, light: !pressed ? null : done ? 'warm' : 'cook' });
+  if (done) steam(cx, 960, t, 1.1, 0.85);
+  if (lt < 1.1) { // pouring rice from a cup
+    const cupX = cx - 40, cupY = 820;
+    ctx.save(); ctx.translate(cupX, cupY); ctx.rotate(1.9);
+    ctx.fillStyle = '#ffd34d'; rr(-50, -60, 100, 120, 14); ctx.fill();
+    ctx.restore();
+    ctx.fillStyle = '#fff';
+    for (let i = 0; i < 24; i++) {
+      const ph = (lt * 2.2 + i / 24) % 1;
+      ctx.beginPath(); ctx.ellipse(cupX + 60 + Math.sin(i) * 14, cupY + 40 + ph * 140, 6, 3, i, 0, Math.PI * 2); ctx.fill();
+    }
+  }
+  // stickman: pours, then presses button, then eats
+  const handTarget = lt < 1.1 ? [cx - 120, 790] : lt < 2.6 ? [cx - 30, cy - 125] : null;
+  let pose;
+  if (handTarget) pose = { lUA: -0.2, lLA: -0.1, rUA: lt < 1.1 ? 2.2 : 1.45, rLA: lt < 1.1 ? 2.0 : 1.55, lUL: -0.2, lLL: -0.1, rUL: 0.2, rLL: 0.1 };
+  else pose = { lUA: 0.9, lLA: 2.6, rUA: -0.9, rLA: -2.4, lUL: -0.2, lLL: -0.1, rUL: 0.2, rLL: 0.1 };
+  const st = stick({ x: 190, y: 1100, s: 1.05, pose, eyes: done ? 'happy' : 'open', mouth: done ? 'grin' : 'smile' });
+  if (done) { // bowl of rice + chopsticks near mouth
+    const bx = st.head[0] + 10, by = st.head[1] + 120;
+    ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.arc(bx, by - 18, 52, Math.PI, 0); ctx.fill();
+    ctx.fillStyle = '#3b6fd6'; ctx.beginPath(); ctx.moveTo(bx - 60, by - 18); ctx.quadraticCurveTo(bx, by + 60, bx + 60, by - 18); ctx.fill();
+    ctx.strokeStyle = '#a0703c'; ctx.lineWidth = 7;
+    line([[bx + 30, by - 40], [bx - 10, by - 120 + Math.sin(t * 10) * 10]]);
+    line([[bx + 45, by - 35], [bx + 5, by - 115 + Math.sin(t * 10) * 10]]);
+  }
+  if (lt > 1.9 && lt < 2.6) { // time skip
+    ctx.save(); ctx.translate(W / 2, 760);
+    ctx.fillStyle = '#fff'; ctx.strokeStyle = INK; ctx.lineWidth = 10;
+    ctx.beginPath(); ctx.arc(0, 0, 80, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+    ctx.lineCap = 'round';
+    line([[0, 0], [Math.sin(t * 25) * 55, -Math.cos(t * 25) * 55]]);
+    line([[0, 0], [Math.sin(t * 4) * 35, -Math.cos(t * 4) * 35]]);
+    ctx.restore();
+  }
+  if (lt < 1.3) caption('Reis + Wasser rein', 380, 90, 11.05, t, { color: INK, stroke: '#fff' });
+  else if (lt < 2.6) caption('Knopf drücken.\nFertig.', 400, 90, 12.3, t, { color: INK, stroke: '#fff' });
+  else caption('Perfekter Reis!', 380, 104, 13.6, t, { box: PINK, color: '#fff' });
+  if (done) caption('Kein Überkochen. Kein Anbrennen.', 1560, 50, 13.9, t, { box: INK, color: '#fff' });
+}
+
+function scene5(t) { // 15.0 – 18.0  features + colours
+  const lt = t - 15;
+  ctx.fillStyle = '#f4f6fb'; ctx.fillRect(0, 0, W, H);
+  ctx.fillStyle = '#e4e9f5';
+  ctx.beginPath(); ctx.arc(980, 260, 360, 0, Math.PI * 2); ctx.fill();
+  const order = [['white', 220, 0.6], ['black', 540, 0.3], ['grey', 860, 0.9]];
+  for (const [col, x, d] of order) {
+    const p = outBack(prog(lt, d * 0.6, d * 0.6 + 0.45));
+    if (p > 0) riceCooker(x, 1330, 0.75 * p, col, { light: 'warm' });
+  }
+  ['Keramikbeschichtung', 'Dampfgarer-Funktion', 'Warmhaltefunktion'].forEach((f, i) =>
+    chip(f, W / 2, 1490 + i * 100, outBack(prog(lt, 0.6 + i * 0.4, 0.95 + i * 0.4)), [PINK, '#2a7fff', '#ff9a1f'][i]));
+  caption('In 3 Farben', 330, 100, 15.05, t, { color: INK, stroke: '#fff' });
+  caption('Schwarz · Weiß · Grau', 450, 56, 15.4, t, { color: '#fff', stroke: INK });
+}
+
+function scene6(t) { // 18.0 – 20.0  CTA
+  const lt = t - 18;
+  const g = ctx.createLinearGradient(0, 0, W, H);
+  g.addColorStop(0, '#1b0f3a'); g.addColorStop(0.6, '#5a1546'); g.addColorStop(1, '#c7472b');
+  ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+  caption('BLACK FRIDAY', 250, 92, 18.0, t, { box: '#fff', color: '#1b0f3a' });
+  const p = outBack(prog(lt, 0.05, 0.45));
+  if (p > 0) riceCooker(380, 1010, 0.95 * p, 'black', { light: 'warm' });
+  // price
+  const pp = outBack(prog(lt, 0.2, 0.55));
+  if (pp > 0) {
+    ctx.save(); ctx.translate(800, 760); ctx.scale(pp, pp); ctx.rotate(-0.06);
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillStyle = '#ffd6dd'; ctx.font = `700 46px ${FONT}`;
+    ctx.fillText('statt 49,99 €', 0, -80);
+    ctx.strokeStyle = '#ff5470'; ctx.lineWidth = 6; line([[-150, -80], [150, -80]]);
+    ctx.font = `900 100px ${FONT}`; ctx.lineWidth = 16; ctx.strokeStyle = '#000';
+    ctx.strokeText('44,99 €', 0, 10); ctx.fillStyle = '#fff'; ctx.fillText('44,99 €', 0, 10);
+    ctx.restore();
+  }
+  // free add-on
+  const fp = outBack(prog(lt, 0.4, 0.75));
+  if (fp > 0) {
+    ctx.save(); ctx.translate(780, 1010); ctx.scale(fp, fp);
+    ctx.fillStyle = '#fff'; rr(-200, -110, 400, 230, 30); ctx.fill();
+    bowl(0, -10, 0.85);
+    ctx.fillStyle = PINK; ctx.font = `900 34px ${FONT}`; ctx.textAlign = 'center';
+    ctx.fillText('+ GRATIS', 0, -78);
+    ctx.fillStyle = INK; ctx.font = `900 30px ${FONT}`;
+    ctx.fillText('Reis-Waschschüssel', 0, 95);
+    ctx.restore();
+  }
+  const bp = outBack(prog(lt, 0.55, 0.9));
+  if (bp > 0) {
+    const pulse = 1 + Math.sin(lt * 10) * 0.035;
+    ctx.save(); ctx.translate(W / 2, 1300); ctx.scale(bp * pulse, bp * pulse);
+    ctx.shadowColor = PINK; ctx.shadowBlur = 50;
+    ctx.fillStyle = PINK; rr(-400, -95, 800, 190, 95); ctx.fill();
+    ctx.shadowBlur = 0;
+    ctx.strokeStyle = '#fff'; ctx.lineWidth = 9; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+    line([[-330, -40], [-305, -40], [-285, 25], [-215, 25], [-200, -20], [-298, -20]]);
+    ctx.fillStyle = '#fff';
+    ctx.beginPath(); ctx.arc(-280, 45, 9, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.arc(-222, 45, 9, 0, Math.PI * 2); ctx.fill();
+    ctx.font = `900 60px ${FONT}`; ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
+    ctx.fillText('Jetzt im', -170, -30);
+    ctx.fillText('TikTok Shop', -170, 38);
+    ctx.restore();
+  }
+  caption('Nur bis 30. November', 1470, 50, 18.9, t, { color: '#fff', stroke: '#000' });
+}
+
+function cutFlash(t) {
+  for (const c of [3.5, 7.0, 11.0, 15.0, 18.0]) {
+    const d = Math.abs(t - c);
+    if (d < 0.12) { ctx.fillStyle = `rgba(255,255,255,${1 - d / 0.12})`; ctx.fillRect(0, 0, W, H); }
+  }
+}
+function renderFrame(t) {
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  ctx.clearRect(0, 0, W, H);
+  ctx.globalAlpha = 1; ctx.shadowBlur = 0; ctx.shadowColor = 'transparent'; ctx.shadowOffsetY = 0;
+  if (t < 3.5) scene1(t);
+  else if (t < 7) scene2(t);
+  else if (t < 11) scene3(t);
+  else if (t < 15) scene4(t);
+  else if (t < 18) scene5(t);
+  else scene6(t);
+  cutFlash(t);
+}
+window.renderFrame = renderFrame;
+window.DURATION = DUR;
+if (!/render=1/.test(location.search)) {
+  const start = performance.now();
+  const loop = now => { renderFrame(((now - start) / 1000) % DUR); requestAnimationFrame(loop); };
+  requestAnimationFrame(loop);
+} else {
+  renderFrame(0);
+}
+</script>
+</body>
+</html>
