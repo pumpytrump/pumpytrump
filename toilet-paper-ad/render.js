@@ -1,0 +1,124 @@
+// Toilet-paper ad. Renders ad.html to a 1080x1920, 30 fps, 20 s MP4 with a generated soundtrack.
+// Usage: node render.js            -> out/fitness-tracker-tiktok-ad.mp4
+//        node render.js --preview  -> out/preview-*.png stills only
+// Needs: playwright (Chromium) and ffmpeg on PATH.
+const { chromium } = require('playwright');
+const { spawn } = require('child_process');
+const fs = require('fs');
+const path = require('path');
+
+const FPS = 30, DUR = 20, SR = 44100;
+const OUT = path.join(__dirname, 'out');
+fs.mkdirSync(OUT, { recursive: true });
+
+// ---------- soundtrack (synthesised, royalty-free) ----------
+function soundtrack() {
+  const n = SR * DUR, buf = new Float32Array(n);
+  const add = (t0, len, fn) => {
+    const s0 = Math.floor(t0 * SR), s1 = Math.min(n, s0 + Math.floor(len * SR));
+    for (let i = Math.max(0, s0); i < s1; i++) buf[i] += fn((i - s0) / SR);
+  };
+  let seed = 1;
+  const noise = () => { seed = (seed * 16807) % 2147483647; return seed / 1073741823.5 - 1; };
+  const note = m => 440 * Math.pow(2, (m - 69) / 12);
+  const rnd01 = i => { const x = Math.sin(i * 91.7) * 43758.5453; return x - Math.floor(x); };
+
+  // 0–3.5 s: empty roll spin + "uh-oh" stinger
+  for (let b = 0.4; b < 0.9; b += 0.07) add(b, 0.05, t => 0.15 * noise() * Math.exp(-t * 80));
+  [[1.0, 67], [1.25, 63], [1.5, 60]].forEach(([at, m]) => add(at, 0.3, t => 0.22 * Math.sign(Math.sin(2 * Math.PI * note(m) * t)) * Math.exp(-t * 5)));
+  // 3.5–7 s: desert wind + sad trombone
+  { let lp = 0; add(3.5, 3.5, t => { lp += (noise() - lp) * 0.03; return 0.6 * lp * Math.min(1, t * 2, (3.5 - t) * 2); }); }
+  [[4.8, 58], [5.15, 57], [5.5, 56], [5.85, 55]].forEach(([at, m], i) =>
+    add(at, i === 3 ? 0.9 : 0.33, t => 0.16 * Math.sin(2 * Math.PI * note(m) * t * (1 + 0.01 * Math.sin(t * 30))) * Math.min(1, t * 30) * Math.exp(-t * (i === 3 ? 2 : 4))));
+
+  // 7–20 s: upbeat 120 bpm groove (C - G - Am - F)
+  const beat = 0.5, roots = [48, 43, 45, 41];
+  for (let b = 7; b < 19.9; b += beat) {
+    const k = Math.round((b - 7) / beat);
+    add(b, 0.35, t => 0.55 * Math.sin(2 * Math.PI * (50 + 110 * Math.exp(-t * 30)) * t) * Math.exp(-t * 8));
+    if (k % 2 === 1) add(b, 0.2, t => 0.22 * noise() * Math.exp(-t * 22));
+    add(b + beat / 2, 0.06, t => 0.08 * noise() * Math.exp(-t * 60));
+    const root = roots[Math.floor(k / 4) % 4];
+    add(b, beat * 0.9, t => 0.16 * Math.sin(2 * Math.PI * note(root) * t) * Math.min(1, t * 50) * Math.exp(-t * 2));
+  }
+  for (const c of [7, 11, 15, 18]) {
+    let lp = 0;
+    add(c - 0.35, 0.5, t => { lp += (noise() - lp) * (0.02 + t * 0.4); return 0.5 * lp * Math.sin(Math.PI * t / 0.5); });
+  }
+  // 7.5–10 s: pops as rolls land
+  for (let i = 0; i < 40; i++) add(7.85 + i * 0.06, 0.05, t => 0.12 * Math.sin(2 * Math.PI * (500 + i * 15) * t) * Math.exp(-t * 60));
+  // 12.3 s: soft "aww" chime
+  for (const m of [76, 79, 83]) add(12.3, 1.5, t => 0.1 * Math.sin(2 * Math.PI * note(m) * t) * Math.exp(-t * 2));
+  // 18.4 s CTA ding
+  for (const m of [84, 91]) add(18.4, 1.4, t => 0.18 * Math.sin(2 * Math.PI * note(m) * t) * Math.exp(-t * 3));
+
+  // normalise + soft limit
+  let peak = 0; for (const v of buf) peak = Math.max(peak, Math.abs(v));
+  const out = Buffer.alloc(44 + n * 2);
+  out.write('RIFF', 0); out.writeUInt32LE(36 + n * 2, 4); out.write('WAVE', 8);
+  out.write('fmt ', 12); out.writeUInt32LE(16, 16); out.writeUInt16LE(1, 20); out.writeUInt16LE(1, 22);
+  out.writeUInt32LE(SR, 24); out.writeUInt32LE(SR * 2, 28); out.writeUInt16LE(2, 32); out.writeUInt16LE(16, 34);
+  out.write('data', 36); out.writeUInt32LE(n * 2, 40);
+  for (let i = 0; i < n; i++) out.writeInt16LE(Math.round(Math.tanh(buf[i] / peak * 1.2) * 0.9 * 32767), 44 + i * 2);
+  const file = path.join(OUT, 'soundtrack.wav');
+  fs.writeFileSync(file, out);
+  return file;
+}
+
+(async () => {
+  const preview = process.argv.includes('--preview');
+  const browser = await chromium.launch();
+  const page = await browser.newPage({ viewport: { width: 1080, height: 1920 } });
+  await page.goto('file://' + path.join(__dirname, 'ad.html') + '?render=1');
+  const grab = (t, type) => page.evaluate(([t, type]) => {
+    window.renderFrame(t);
+    return document.getElementById('c').toDataURL(type, 0.95).split(',')[1];
+  }, [t, type]);
+
+  if (preview) {
+    for (const t of [2, 5, 8.5, 10.5, 13.5, 17, 19.3]) {
+      fs.writeFileSync(path.join(OUT, `preview-${t}.png`), Buffer.from(await grab(t, 'image/png'), 'base64'));
+    }
+    await browser.close();
+    return;
+  }
+
+  let wav = soundtrack();
+  // Voiceover: voiceover/l1..l6.wav placed at scene starts, music ducked underneath.
+  const VO = [[1, 0.3], [2, 3.7], [3, 7.2], [4, 11.2], [5, 15.1], [6, 18.15]]
+    .map(([n, at]) => [path.join(__dirname, 'voiceover', `l${n}.wav`), at])
+    .filter(([f]) => fs.existsSync(f));
+  if (VO.length) {
+    const mixed = path.join(OUT, 'mix.wav');
+    const inputs = VO.flatMap(([f]) => ['-i', f]);
+    const delays = VO.map(([, at], i) =>
+      `[${i + 1}:a]aresample=44100,aformat=channel_layouts=mono,adelay=${Math.round(at * 1000)}:all=1[v${i}]`).join(';');
+    const voice = VO.map((_, i) => `[v${i}]`).join('') +
+      `amix=inputs=${VO.length}:normalize=0,highpass=f=80,acompressor=threshold=0.2:ratio=3,volume=1.6,asplit[vo][key]`;
+    const filter = `${delays};${voice};[0:a]volume=0.55[mus];[mus][key]sidechaincompress=threshold=0.03:ratio=6:attack=20:release=300[duck];` +
+      `[duck][vo]amix=inputs=2:normalize=0:duration=first,alimiter=limit=0.95[out]`;
+    await new Promise((res, rej) => spawn('ffmpeg', ['-y', '-loglevel', 'error', '-i', wav, ...inputs,
+      '-filter_complex', filter, '-map', '[out]', mixed], { stdio: 'inherit' })
+      .on('close', c => c === 0 ? res() : rej(new Error('ffmpeg mix exit ' + c))));
+    wav = mixed;
+  }
+  const mp4 = path.join(OUT, 'klopapier-tiktok-ad.mp4');
+  const ff = spawn('ffmpeg', [
+    '-y', '-loglevel', 'error',
+    '-f', 'image2pipe', '-framerate', String(FPS), '-c:v', 'mjpeg', '-i', '-',
+    '-i', wav,
+    '-c:v', 'libx264', '-pix_fmt', 'yuv420p', '-crf', '18', '-preset', 'medium',
+    '-c:a', 'aac', '-b:a', '192k', '-af', 'apad', '-t', String(DUR), '-movflags', '+faststart', mp4
+  ], { stdio: ['pipe', 'inherit', 'inherit'] });
+
+  const frames = FPS * DUR;
+  for (let i = 0; i < frames; i++) {
+    const jpg = Buffer.from(await grab(i / FPS, 'image/jpeg'), 'base64');
+    if (!ff.stdin.write(jpg)) await new Promise(r => ff.stdin.once('drain', r));
+    if (i % 60 === 0) process.stdout.write(`frame ${i}/${frames}\n`);
+  }
+  ff.stdin.end();
+  await new Promise((res, rej) => ff.on('close', c => c === 0 ? res() : rej(new Error('ffmpeg exit ' + c))));
+  await browser.close();
+  console.log('Wrote', mp4);
+})();
