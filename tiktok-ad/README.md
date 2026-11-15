@@ -19,3 +19,8 @@ node render.js            # full MP4
 node render.js --preview  # still frames only
 ```
 Requires Node, Playwright (Chromium) and ffmpeg. Text is in German; edit the `caption(...)` calls in `ad.html` to change it.
+
+## Voiceover
+German voiceover lines live in `voiceover/l1.wav … l6.wav` (Piper TTS, Thorsten voice). `render.js` places each line at
+its scene and ducks the music underneath. Replace any file with your own recording (same name) and re-run `node render.js`.
+Regenerate with `voiceover/make-voiceover.sh <path-to-de_DE-thorsten-high.onnx>`.

@@ -89,14 +89,32 @@ function soundtrack() {
     return;
   }
 
-  const wav = soundtrack();
+  let wav = soundtrack();
+  // Voiceover: voiceover/l1..l6.wav placed at scene starts, music ducked underneath.
+  const VO = [[1, 0.3], [2, 3.6], [3, 7.25], [4, 11.2], [5, 14.85], [6, 18.15]]
+    .map(([n, at]) => [path.join(__dirname, 'voiceover', `l${n}.wav`), at])
+    .filter(([f]) => fs.existsSync(f));
+  if (VO.length) {
+    const mixed = path.join(OUT, 'mix.wav');
+    const inputs = VO.flatMap(([f]) => ['-i', f]);
+    const delays = VO.map(([, at], i) =>
+      `[${i + 1}:a]aresample=44100,aformat=channel_layouts=mono,adelay=${Math.round(at * 1000)}:all=1[v${i}]`).join(';');
+    const voice = VO.map((_, i) => `[v${i}]`).join('') +
+      `amix=inputs=${VO.length}:normalize=0,highpass=f=80,acompressor=threshold=0.2:ratio=3,volume=1.6,asplit[vo][key]`;
+    const filter = `${delays};${voice};[0:a]volume=0.55[mus];[mus][key]sidechaincompress=threshold=0.03:ratio=6:attack=20:release=300[duck];` +
+      `[duck][vo]amix=inputs=2:normalize=0:duration=first,alimiter=limit=0.95[out]`;
+    await new Promise((res, rej) => spawn('ffmpeg', ['-y', '-loglevel', 'error', '-i', wav, ...inputs,
+      '-filter_complex', filter, '-map', '[out]', mixed], { stdio: 'inherit' })
+      .on('close', c => c === 0 ? res() : rej(new Error('ffmpeg mix exit ' + c))));
+    wav = mixed;
+  }
   const mp4 = path.join(OUT, 'fitness-tracker-tiktok-ad.mp4');
   const ff = spawn('ffmpeg', [
     '-y', '-loglevel', 'error',
     '-f', 'image2pipe', '-framerate', String(FPS), '-c:v', 'mjpeg', '-i', '-',
     '-i', wav,
     '-c:v', 'libx264', '-pix_fmt', 'yuv420p', '-crf', '18', '-preset', 'medium',
-    '-c:a', 'aac', '-b:a', '192k', '-shortest', '-movflags', '+faststart', mp4
+    '-c:a', 'aac', '-b:a', '192k', '-af', 'apad', '-t', String(DUR), '-movflags', '+faststart', mp4
   ], { stdio: ['pipe', 'inherit', 'inherit'] });
 
   const frames = FPS * DUR;
