@@ -1,7 +1,7 @@
 // Shared drawing library for the stickman TikTok ads (1080x1920 canvas #c).
 // Usage in an ad page: <script src="../tools/lib.js"></script><script src="scenes.js"></script>
 // scenes.js calls startAd([[endTime, sceneFn], ...]).
-const W = 1080, H = 1920, DUR = 20;
+const W = 1080, H = 1920, DUR = (window.AD && window.AD.duration) || 20;
 const cv = document.getElementById('c');
 const ctx = cv.getContext('2d');
 const FONT = '"Arial Black", "DejaVu Sans", "Liberation Sans", sans-serif';
