@@ -10,12 +10,14 @@ Shared code for the ads in `koffein-pouches-ad/`, `flavour-pulver-ad/`, `schwarz
 Each ad dir: `ad.html` (loads `lib.js` + `scenes.js`), `scenes.js`, `config.js` (output name, voice timings, sound effects).
 Prices are hard-coded in each `scenes.js` (`scene6`) – update them when offers end.
 
-## Realistic style (`real.js` + `real-render.js`)
+## Realistic style (`real.js` + `gfx.js` + `real-render.js`)
 
-Used by `nackenkissen-ad/`, `oel-250ml-ad/`, `satisbites-ad/`: real product photos (cropped from the shop listing) and
-AI photos (ElevenLabs image generation) with camera moves, punch-in cuts, film grain, captions synced to the voice.
+Used by `nackenkissen-ad/`, `oel-250ml-ad/`, `satisbites-ad/` – 3 variants each. Visuals are 100 % code:
+product photos from the shop listing + code-drawn motion graphics (`gfx.js`). Only the voice comes from ElevenLabs.
 
-- `node tools/real-render.js <ad-dir> [--preview]` → `<ad-dir>/out/<ad-dir>.mp4`
-- Each ad dir: `ad.html`, `ad.js` (shots, captions, overlay), `assets/` (photos + `voice.mp3` from ElevenLabs, voice "Ben").
-- Music: `tools/music/upbeat-ad.mp3` (ElevenLabs Music, instrumental), ducked under the voice; mix normalised to −14 LUFS.
-- `assets/voice-take2.mp3` is the alternative take – rename it to `voice.mp3` to use it.
+- `node tools/real-render.js <ad-dir> v1|v2|v3 [--preview]` → `<ad-dir>/out/<ad-dir>-v1.mp4` …
+- Each ad dir: `ad.html` (`?v=v2` picks the variant), `ad-v1.js` … `ad-v3.js` (shots, captions, overlay),
+  `assets/` (product photos + `voice-v1.mp3` … from ElevenLabs, voice "Ben").
+- Shot modes: photo `cover` (camera move), `card` (photo on blurred background), `gfx` (code graphics via `draw(lt, t)`).
+- Music: `tools/music/upbeat-ad.mp3` (made earlier with ElevenLabs Music), ducked under the voice; mix at −14 LUFS.
+  Delete or replace the file to change the music.

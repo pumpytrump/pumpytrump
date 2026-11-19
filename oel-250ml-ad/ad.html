@@ -12,8 +12,13 @@
 </head>
 <body>
 <canvas id="c" width="1080" height="1920"></canvas>
-<script src="ad.js"></script>
+<script>
+  // ?v=v1|v2|v3 picks the variant (ad-v1.js …)
+  const v = (new URLSearchParams(location.search).get('v') || 'v1').replace(/[^a-z0-9]/g, '');
+  document.write(`<script src="ad-${v}.js"><\/script>`);
+</script>
 <script src="../tools/lib.js"></script>
+<script src="../tools/gfx.js"></script>
 <script src="../tools/real.js"></script>
 </body>
 </html>

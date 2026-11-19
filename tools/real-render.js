@@ -1,5 +1,5 @@
 // Renders a "realistic" ad (tools/real.js) to MP4.
-// Usage: node tools/real-render.js <ad-dir> [--preview]
+// Usage: node tools/real-render.js <ad-dir> [v1|v2|v3] [--preview]   (ad-<v>.js + assets/voice-<v>.mp3)
 // <ad-dir>: ad.html, ad.js (window.AD), assets/voice.mp3 (ElevenLabs voiceover).
 // Music: tools/music/upbeat-ad.mp3 (ElevenLabs Music, instrumental), ducked under the voice.
 // SFX (whoosh on cuts, pop on captions, ding on AD.dings) are synthesised here.
@@ -10,6 +10,7 @@ const path = require('path');
 
 const FPS = 30, SR = 44100, VO_DELAY = 0.2;
 const dir = path.resolve(process.argv[2] || '.');
+const V = (process.argv[3] && !process.argv[3].startsWith('--')) ? process.argv[3] : 'v1';
 const OUT = path.join(dir, 'out');
 fs.mkdirSync(OUT, { recursive: true });
 const run = args => new Promise((res, rej) => spawn('ffmpeg', ['-y', '-loglevel', 'error', ...args], { stdio: 'inherit' })
@@ -46,14 +47,14 @@ function sfxTrack(dur, cuts, pops, dings) {
     out.writeInt16LE(Math.round(Math.tanh(L[i]) * 30000), 44 + i * 4);
     out.writeInt16LE(Math.round(Math.tanh(R[i]) * 30000), 46 + i * 4);
   }
-  const f = path.join(OUT, 'sfx.wav'); fs.writeFileSync(f, out); return f;
+  const f = path.join(OUT, `sfx-${V}.wav`); fs.writeFileSync(f, out); return f;
 }
 
 (async () => {
   const preview = process.argv.includes('--preview');
   const browser = await chromium.launch({ args: ['--allow-file-access-from-files'] });
   const page = await browser.newPage({ viewport: { width: 1080, height: 1920 } });
-  await page.goto('file://' + path.join(dir, 'ad.html') + '?render=1');
+  await page.goto('file://' + path.join(dir, 'ad.html') + '?render=1&v=' + V);
   await page.waitForFunction(() => window.adReady === true);
   const meta = await page.evaluate(() => ({
     duration: AD.duration, cuts: AD.shots.map(s => s.t0).filter(t => t > 0),
@@ -67,18 +68,18 @@ function sfxTrack(dur, cuts, pops, dings) {
   if (preview) {
     const files = [];
     for (const t of meta.previews) {
-      const f = path.join(OUT, `preview-${t}.png`);
+      const f = path.join(OUT, `preview-${V}-${t}.png`);
       fs.writeFileSync(f, Buffer.from(await grab(t, 'image/png'), 'base64')); files.push(f);
     }
     await browser.close();
-    await run([...files.flatMap(f => ['-i', f]), '-filter_complex', `hstack=${files.length},scale=${files.length * 300}:-1`, path.join(OUT, 'contact.png')]);
+    await run([...files.flatMap(f => ['-i', f]), '-filter_complex', `hstack=${files.length},scale=${files.length * 300}:-1`, path.join(OUT, `contact-${V}.png`)]);
     files.forEach(f => fs.unlinkSync(f));
-    console.log('Wrote', path.join(OUT, 'contact.png'));
+    console.log('Wrote', path.join(OUT, `contact-${V}.png`));
     return;
   }
 
   const D = meta.duration;
-  const silent = path.join(OUT, 'video.mp4');
+  const silent = path.join(OUT, `video-${V}.mp4`);
   const ff = spawn('ffmpeg', ['-y', '-loglevel', 'error', '-f', 'image2pipe', '-framerate', String(FPS), '-c:v', 'mjpeg', '-i', '-',
     '-c:v', 'libx264', '-pix_fmt', 'yuv420p', '-crf', '21', '-maxrate', '9M', '-bufsize', '18M', '-preset', 'medium', silent], { stdio: ['pipe', 'inherit', 'inherit'] });
   for (let i = 0; i < Math.round(D * FPS); i++) {
@@ -91,7 +92,7 @@ function sfxTrack(dur, cuts, pops, dings) {
 
   const sfx = sfxTrack(D, meta.cuts, meta.pops, meta.dings);
   const music = path.join(__dirname, 'music', 'upbeat-ad.mp3');
-  const voice = path.join(dir, 'assets', 'voice.mp3');
+  const voice = path.join(dir, 'assets', `voice-${V}.mp3`);
   const ms = Math.round(VO_DELAY * 1000);
   const filter = [
     `[1:a]aresample=${SR},aformat=channel_layouts=stereo,adelay=${ms}|${ms},highpass=f=70,acompressor=threshold=0.15:ratio=3:attack=5:release=120,equalizer=f=3500:t=q:w=1:g=2,volume=1.5,apad=whole_dur=${D},asplit[vo][key]`,
@@ -100,7 +101,7 @@ function sfxTrack(dur, cuts, pops, dings) {
     `[3:a]volume=0.8[fx]`,
     `[duck][vo][fx]amix=inputs=3:normalize=0:duration=first,loudnorm=I=-14:TP=-1.0:LRA=9[out]`
   ].join(';');
-  const mp4 = path.join(OUT, path.basename(dir) + '.mp4');
+  const mp4 = path.join(OUT, `${path.basename(dir)}-${V}.mp4`);
   await run(['-i', silent, '-i', voice, '-stream_loop', '-1', '-i', music, '-i', sfx, '-filter_complex', filter,
     '-map', '0:v', '-map', '[out]', '-c:v', 'copy', '-c:a', 'aac', '-b:a', '192k', '-ar', String(SR), '-t', String(D), '-movflags', '+faststart', mp4]);
   for (const f of [silent, sfx]) fs.rmSync(f, { force: true });

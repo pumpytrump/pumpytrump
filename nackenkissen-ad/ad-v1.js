@@ -1,13 +1,13 @@
-// Nackenkissen (Memory-Schaum) – realistic TikTok Shop ad. Voice: ElevenLabs "Ben", times include the 0.2 s voice delay.
+// Nackenkissen v1 – Problem → Lösung. Voice: ElevenLabs "Ben", times include the 0.2 s voice delay.
 window.AD = {
   duration: 21,
   images: {
-    ai: 'assets/ai-problem.png', pillow: 'assets/p-pillow.png', scene: 'assets/p-scene.png',
+    pillow: 'assets/p-pillow.png', scene: 'assets/p-scene.png',
     styles: 'assets/p-styles.png', back: 'assets/p-back.png'
   },
   shots: [
-    { img: 'ai', t0: 0, t1: 3.7, fx: 0.42, fy: 0.3, z0: 1.0, z1: 1.18 },
-    { img: 'ai', t0: 3.7, t1: 5.4, fx: 0.45, fy: 0.25, z0: 1.5, z1: 1.7 },
+    { mode: 'gfx', t0: 0, t1: 3.7, draw: (lt, t) => { G.grad('#0b1026', '#26204a'); G.blobs(t, ['rgba(90,110,255,0.25)']); G.clock('06:30', W / 2, 860, 150, t, 8); } },
+    { mode: 'gfx', t0: 3.7, t1: 5.4, draw: (lt, t) => { G.grad('#141a33', '#2b2347'); G.neckProfile(t, W / 2 + 40, 1000, 1.0, false); } },
     { img: 'pillow', t0: 5.4, t1: 7.8, mode: 'card', z0: 0.95, z1: 1.05, cardY: 900 },
     { img: 'scene', t0: 7.8, t1: 10.2, fx: 0.55, fy: 0.5, z0: 1.0, z1: 1.15 },
     { img: 'styles', t0: 10.2, t1: 12.9, mode: 'card', z0: 0.95, z1: 1.03, cardY: 880 },
@@ -16,7 +16,7 @@ window.AD = {
   ],
   captions: [
     { t0: 0.2, t1: 3.6, text: 'Jeden Morgen\n*verspannter Nacken*?', pos: 'top', size: 80 },
-    { t0: 3.9, t1: 5.3, text: "Vielleicht liegt's\nam *Kissen*", pos: 'mid', size: 84 },
+    { t0: 3.9, t1: 5.3, text: "Vielleicht liegt's\nam *Kissen*", pos: 'top', size: 84 },
     { t0: 5.5, t1: 7.75, text: '*Memory-Schaum*', pos: 'top', size: 84 },
     { t0: 7.9, t1: 9.3, text: 'ergonomisch geformt', pos: 'low', size: 70 },
     { t0: 9.3, t1: 12.8, text: 'Rücken · Seite · *Bauch*', pos: 'top', size: 72 },

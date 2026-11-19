@@ -1,12 +1,12 @@
-// Bio-Schwarzkümmelöl 250 ml – realistic TikTok Shop ad (no health claims, only listing facts).
+// Schwarzkümmelöl v1 – Qualität erklärt (no health claims, only listing facts).
 window.AD = {
   duration: 22.8,
-  images: { salad: 'assets/ai-salad.png', compare: 'assets/o-compare.png', bottle: 'assets/o-bottle.png' },
+  images: { compare: 'assets/o-compare.png', bottle: 'assets/o-bottle.png' },
   shots: [
-    { img: 'salad', t0: 0, t1: 3.3, fx: 0.62, fy: 0.3, z0: 1.0, z1: 1.15 },
+    { mode: 'gfx', t0: 0, t1: 3.3, draw: (lt, t) => G.oilDrop(t, lt) },
     { img: 'compare', t0: 3.3, t1: 7.3, mode: 'card', z0: 0.95, z1: 1.02, cardY: 1000, cardH: 1100 },
     { img: 'bottle', t0: 7.3, t1: 10.75, mode: 'card', z0: 0.88, z1: 0.98, cardY: 1000, cardH: 1250 },
-    { img: 'salad', t0: 10.75, t1: 14.0, fx: 0.12, fy: 0.62, fx1: 0.3, z0: 1.25, z1: 1.4 },
+    { mode: 'gfx', t0: 10.75, t1: 14.0, draw: lt => G.route(lt) },
     { img: 'bottle', t0: 14.0, t1: 17.0, fx: 0.5, fy: 0.55, fy1: 0.62, z0: 1.0, z1: 1.25 },
     { img: 'bottle', t0: 17.0, t1: 22.8, mode: 'card', z0: 0.9, z1: 1.0, cardY: 1010, cardH: 780 }
   ],

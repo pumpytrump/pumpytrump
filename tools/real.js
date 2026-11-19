@@ -12,11 +12,13 @@
   const A = window.AD;
   const imgs = {};
   let pending = 0;
+  if (!Object.keys(A.images).length) setTimeout(() => { window.adReady = true; if (!/render=1/.test(location.search)) loop(); });
   for (const [k, src] of Object.entries(A.images)) {
     pending++;
     const im = new Image();
     im.onload = () => { if (--pending === 0) { window.adReady = true; if (!/render=1/.test(location.search)) loop(); } };
     im.crossOrigin = 'anonymous'; im.src = src; imgs[k] = im;
+    window.IMG = imgs;
   }
   // grain tiles
   const grains = [];
@@ -102,7 +104,10 @@
     const lt = t - sh.t0, k = clamp(lt / (sh.t1 - sh.t0));
     const punch = 1 + 0.1 * (1 - ease(prog(lt, 0, 0.3))) * (sh.t0 > 0 ? 1 : 0);
     const z = lerp(sh.z0 || 1, sh.z1 || 1.12, ease(k)) * punch;
-    if (sh.mode === 'card') card(sh.img, punch * lerp(sh.z0 || 1, sh.z1 || 1, ease(k)), lt, sh);
+    if (sh.mode === 'gfx') {
+      ctx.save(); ctx.translate(W / 2, H / 2); ctx.scale(punch, punch); ctx.translate(-W / 2, -H / 2);
+      sh.draw(lt, t, k); ctx.restore();
+    } else if (sh.mode === 'card') card(sh.img, punch * lerp(sh.z0 || 1, sh.z1 || 1, ease(k)), lt, sh);
     else cover(imgs[sh.img], lerp(sh.fx ?? 0.5, sh.fx1 ?? sh.fx ?? 0.5, ease(k)), lerp(sh.fy ?? 0.5, sh.fy1 ?? sh.fy ?? 0.5, ease(k)), z);
     // vignette + top/bottom shade so captions read
     const vg = ctx.createRadialGradient(W / 2, H / 2, 500, W / 2, H / 2, 1250);
