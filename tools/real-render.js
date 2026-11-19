@@ -80,7 +80,7 @@ function sfxTrack(dur, cuts, pops, dings) {
   const D = meta.duration;
   const silent = path.join(OUT, 'video.mp4');
   const ff = spawn('ffmpeg', ['-y', '-loglevel', 'error', '-f', 'image2pipe', '-framerate', String(FPS), '-c:v', 'mjpeg', '-i', '-',
-    '-c:v', 'libx264', '-pix_fmt', 'yuv420p', '-crf', '18', '-preset', 'medium', silent], { stdio: ['pipe', 'inherit', 'inherit'] });
+    '-c:v', 'libx264', '-pix_fmt', 'yuv420p', '-crf', '21', '-maxrate', '9M', '-bufsize', '18M', '-preset', 'medium', silent], { stdio: ['pipe', 'inherit', 'inherit'] });
   for (let i = 0; i < Math.round(D * FPS); i++) {
     const jpg = Buffer.from(await grab(i / FPS, 'image/jpeg'), 'base64');
     if (!ff.stdin.write(jpg)) await new Promise(r => ff.stdin.once('drain', r));
