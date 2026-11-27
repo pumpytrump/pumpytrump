@@ -1,0 +1,6 @@
+out/frames/
+out/ctest_*.png
+out/sfx.wav
+out/*.log
+out/test/
+__pycache__/
