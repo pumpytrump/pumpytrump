@@ -100,11 +100,11 @@ def product_card(cr, t):
     k = back((t - TL["cta"] - 0.1) / 0.35)
     if k < 0.05: return
     cr.save(); cr.translate(330, 1250); cr.scale(k, k)
-    rrect(cr, -270, -95, 540, 190, 26); cr.set_source_rgba(1, 1, 1, 0.96); cr.fill()
-    draw_img(cr, bar_s, -150, 0, 120)
-    font(cr, 40); cr.set_source_rgb(0.1, 0.1, 0.12); cr.move_to(-30, -32); cr.show_text("SCHOKOELLSEN")
-    font(cr, 28); cr.set_source_rgb(0.35, 0.35, 0.4); cr.move_to(-30, 8); cr.show_text("4 × 70 g · Black Friday")
-    font(cr, 28); cr.set_source_rgb(*RED); cr.move_to(-30, 52); cr.show_text("TIPP UNTEN LINKS")
+    rrect(cr, -290, -100, 600, 200, 26); cr.set_source_rgba(1, 1, 1, 0.97); cr.fill()
+    draw_img(cr, bar_s, -170, 0, 78)
+    font(cr, 38); cr.set_source_rgb(0.1, 0.1, 0.12); cr.move_to(-40, -34); cr.show_text("SCHOKOELLSEN")
+    font(cr, 27); cr.set_source_rgb(0.35, 0.35, 0.4); cr.move_to(-40, 6); cr.show_text("4 × 70 g · Black Friday")
+    font(cr, 27); cr.set_source_rgb(*RED); cr.move_to(-40, 50); cr.show_text("TIPP UNTEN LINKS")
     cr.restore()
 
 def red_arrow(cr, t, t0, x=150, y=1690):
