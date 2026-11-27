@@ -216,7 +216,7 @@ def draw_face(cr, p, J, t):
         for sx in (-1, 1): cr.arc(sx * 38, 12, 11, 0, 2 * math.pi); cr.fill()
     cr.restore()
 
-def draw_stick(cr, p, t, props=()):
+def draw_stick(cr, p, t, props=(), wear=(), hat=None):
     """props: list of dicts(surf|fn, at='rh'|'lh'|'mid', h, rot, dx, dy, alpha)."""
     J = rig(p); s = p["s"]; col = ink_col(p)
     cr.set_line_cap(cairo.LINE_CAP_ROUND); cr.set_line_join(cairo.LINE_JOIN_ROUND)
@@ -233,11 +233,13 @@ def draw_stick(cr, p, t, props=()):
     seg(J["sh"], J["lh_e"], J["lh"])
     seg(J["hip"], J["lf_e"], J["lf"]); seg(J["hip"], J["rf_e"], J["rf"])
     seg(J["hip"], J["neck"])
+    for f in wear: f(cr, J, p)
     hx, hy = J["head"]
     if p.get("outline"): cr.arc(hx, hy, HEADR * s + lw * 0.45 + 6, 0, 2 * math.pi); cr.set_source_rgb(1, 1, 1); cr.fill()
     cr.arc(hx, hy, HEADR * s, 0, 2 * math.pi); cr.set_source_rgb(1, 1, 1); cr.fill_preserve()
     cr.set_source_rgb(*col); cr.set_line_width(lw * 0.85); cr.stroke()
     draw_face(cr, p, J, t)
+    if hat: hat(cr, J, p)
     seg(J["sh"], J["rh_e"], J["rh"])
     for pr in props:
         at = pr.get("at", "rh")
@@ -382,7 +384,7 @@ def render(name, voice, caption_words, frame_fn, sfx, total_pad=TAIL):
                            "-r", str(FPS), "-i", "-", "-i", os.path.join(A, voice + ".wav"), "-i", os.path.join(TMP, name + "_sfx.wav"),
                            "-filter_complex", "[1:a]aresample=44100,apad[v];[2:a]volume=0.85[s];[v][s]amix=inputs=2:duration=first:normalize=0,loudnorm=I=-14:TP=-1.5[a]",
                            "-map", "0:v", "-map", "[a]", "-t", f"{total:.3f}", "-c:v", "libx264", "-preset", "medium",
-                           "-crf", "18", "-pix_fmt", "yuv420p", "-c:a", "aac", "-b:a", "192k", "-ar", "48000",
+                           "-crf", "16", "-tune", "animation", "-pix_fmt", "yuv420p", "-c:a", "aac", "-b:a", "192k", "-ar", "48000",
                            "-movflags", "+faststart", out], stdin=subprocess.PIPE)
     state = {}
     for fi in range(int(total * FPS)):
