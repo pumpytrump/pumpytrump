@@ -434,7 +434,7 @@ def video_schoko2():
     def sfx(T):
         return [(0.0, "boing"), (5, "whoosh"), (12, "whoosh"), (T[12] + 0.45, "pop"), (14, "whoosh"), (T[14] + 0.45, "pop"),
                 (16, "whoosh"), (T[16] + 0.45, "pop"), (21, "buzz"), (22, "buzz"), (23, "buzz"), (24, "boom"),
-                (25, "ding"), (26, "whoosh"), (34, "boing"), (37, "boom")]
+                (25, "ding"), (26, "whoosh"), (T[36] + 0.3, "boing"), (37, "boom")]
     render("6_schokoellsen_detektiv", "schoko2", cw, frame, sfx)
 
 if __name__ == "__main__":

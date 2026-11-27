@@ -366,6 +366,8 @@ def sfx_track(events, dur):
 
 # ============================================================ renderer
 def render(name, voice, caption_words, frame_fn, sfx, total_pad=TAIL):
+    suf = os.environ.get("VOICE_SUFFIX", "")
+    if suf and os.path.exists(os.path.join(A, voice + suf + ".wav")): voice += suf
     wj = json.load(open(os.path.join(A, "words.json")))[voice]
     assert len(wj) == len(caption_words), (len(wj), len(caption_words))
     words = []
