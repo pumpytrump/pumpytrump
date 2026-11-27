@@ -93,6 +93,10 @@ def run(cfg):
         if kk > 0.05: draw_img(cr, prod, W / 2, 790, cfg.end_img_h * (1 + 0.04 * u) * kk)
         font(cr, 44); e = cr.text_extents(cfg.end_sub); sc_ = min(1.0, 980 / e.x_advance)
         cr.save(); cr.translate(W / 2, 1260); cr.scale(sc_, sc_); cr.move_to(-e.x_advance / 2, 0); cr.set_source_rgb(0.3, 0.3, 0.35); cr.show_text(cfg.end_sub); cr.restore()
+        if getattr(cfg, "deal", None):
+            kd = back((u - 0.25) / 0.3)
+            if kd > 0.05:
+                cr.save(); cr.translate(W / 2, 470); cr.rotate(math.radians(-4)); cr.scale(kd, kd); pill(cr, cfg.deal, 0, 0, 54, RED); cr.restore()
         font(cr, 52); txt = "TIPP UNTEN LINKS AUF DEN SHOP"; e = cr.text_extents(txt)
         cr.move_to(W / 2 - e.x_advance / 2, 1355); cr.set_source_rgb(*RED); cr.show_text(txt)
         if getattr(cfg, "end_note", None):
@@ -112,6 +116,13 @@ def run(cfg):
             anc = anchors.get(str(si))
             badge(cr, t, cfg.badge, cfg.accent, TL["end"])
             cfg.overlays(cr, t, fi, conf, anc)
+            deal = getattr(cfg, "deal", None)
+            if deal:
+                t0, t1 = getattr(cfg, "deal_t", (0.7, 2.4))
+                k = back((t - t0) / 0.3) * (1 - ease((t - t1) / 0.2))
+                if k > 0.05:
+                    cr.save(); cr.translate(W / 2, 1330); cr.rotate(math.radians(-3)); cr.scale(k * (1 + 0.03 * math.sin(t * 9)), k * (1 + 0.03 * math.sin(t * 9)))
+                    pill(cr, deal, 0, 0, 60, RED); cr.restore()
             conf.step_draw(cr, 1 / FPS)
             if t >= TL["cta"]:
                 product_card(cr, t); red_arrow(cr, t, TL["cta"] + 0.25)

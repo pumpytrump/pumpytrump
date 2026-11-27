@@ -4,3 +4,4 @@ tunnelblick
 iced_coffee
 lyora
 elusa
+daily100

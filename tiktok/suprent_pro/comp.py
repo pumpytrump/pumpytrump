@@ -44,6 +44,7 @@ cfg.captions = ["Suprent", "Pro", "Haarschneider!", "Freitagabend.", "Date", "in
                 "Keramikklinge.", "Kabellos.", "Zero", "-Gap", "für", "die", "perfekte", "Kontur.", "10", "Minuten?", "Ich", "hab", "nur",
                 "fünf", "gebraucht!", "Gibt's", "in", "Silber", "oder", "Orange.", "Tipp", "unten", "links", "und", "hol", "ihn", "dir!"]
 cfg.overlays = overlays
+cfg.deal = "BLACK FRIDAY: -12 % → 99,99 €"
 cfg.sfx = ([(0.0, "boom"), (0.05, "tada"), (0.6, "buzz"), (TL["date"], "whoosh"), (T[3], "pop"), (T[4], "pop"), (T[11], "boing"), (T[11], "crack"),
             (T[12], "pop"), (T[13], "pop"), (T[14], "pop")] + [(TL["trim"] + 0.85 * i, "buzz") for i in range(4)] +
            [(T[20], "whoosh"), (T[22], "tada"), (T[22], "ding"), (TL["colors"], "whoosh"), (T[29], "pop"), (T[31], "pop"),

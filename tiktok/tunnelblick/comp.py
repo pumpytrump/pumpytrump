@@ -59,6 +59,7 @@ cfg.captions = ["FGN", "Tunnelblick!", "Montag,", "Deadline…", "meine", "Augen
                 "Kaffee:", "ein", "Pouch", "unter", "die", "Lippe.", "75", "Milligramm", "Koffein,", "null", "Nikotin,", "null", "Zucker.",
                 "Und", "zack:", "Tunnelblick!", "Tipp", "unten", "links", "und", "hol's", "dir!"]
 cfg.overlays = overlays
+cfg.deal = "BLACK FRIDAY DEAL IM SHOP"
 cfg.sfx = ([(0.0, "boom"), (0.05, "tada"), (0.7, "pop"), (TL["tired"], "whoosh"), (T[2], "pop"), (T[3], "pop"), (T[4], "boing"),
             (TL["coffee"], "whoosh"), (T[13] + 0.2, "crack"), (TL["pouch"], "pop"), (TL["pouch"] + 0.4, "pop"), (T[19], "pop"), (T[22], "pop"),
             (T[24], "pop"), (T[27], "boom"), (T[27], "whoosh"), (T[28], "tada")] + [(TL["zack"] + 0.3 + 0.09 * i, "crunch") for i in range(14)] +

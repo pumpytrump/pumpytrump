@@ -49,6 +49,7 @@ cfg.captions = ["LYORA", "Nerion.", "Extrait de Parfum.", "Ein Sprüher…", "un
                 "Extrait", "heißt:", "die", "intensivste", "Duftkonzentration.", "Elegant,", "edel,", "unvergesslich.", "Das", "perfekte",
                 "Weihnachtsgeschenk…", "oder", "einfach", "für", "dich.", "Tipp", "unten", "links", "und", "hol's", "dir!"]
 cfg.overlays = overlays
+cfg.deal = "BLACK FRIDAY DEAL IM SHOP"
 cfg.sfx = ([(0.0, "boom"), (0.05, "tada"), (T[2], "whoosh"), (TL["spray"], "whoosh"), (TL["spray"] + 0.5, "buzz"), (T[8] - 0.6, "pop"), (T[8] - 0.25, "pop"),
             (T[8] + 0.1, "pop"), (TL["extrait"], "whoosh"), (T[16], "ding"), (T[17], "pop"), (T[18], "pop"), (T[19], "pop"), (TL["gift"], "whoosh"),
             (T[22], "tada"), (TL["you"], "whoosh"), (TL["cta"], "whoosh"), (TL["cta"] + 0.1, "pop"), (TL["end"], "whoosh"), (TL["end"] + 0.2, "pop")])

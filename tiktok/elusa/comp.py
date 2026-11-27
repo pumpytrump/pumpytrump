@@ -38,6 +38,7 @@ cfg.end_title = "ELUSA 501"; cfg.end_sub = "Extrait de Parfum · Unisex · süß
 cfg.captions = ["Elusa", "501!", "Extrait de Parfum,", "unisex.", "Süß,", "mit", "Orange,", "Vanille", "und", "Gewürzen…", "Riecht", "wie",
                 "Weihnachtsmarkt –", "nur", "edel!", "Und", "gerade", "gilt:", "Kauf", "drei,", "spar", "46 %!", "Tipp", "unten", "links", "und", "hol's", "dir!"]
 cfg.overlays = overlays
+cfg.deal = "KAUF 3 = -46 %"
 cfg.sfx = ([(0.0, "boom"), (0.05, "tada"), (TL["spray"], "whoosh"), (TL["spray"] + 0.5, "buzz"), (T[3], "pop"), (T[4], "pop"), (T[6], "pop"), (T[7], "pop"),
             (T[9], "pop"), (TL["market"], "whoosh"), (T[12], "ding"), (T[12] + 0.1, "tada"), (T[13], "pop"), (T[18], "boom"), (T[18], "pop"), (T[20], "ding"),
             (TL["cta"], "whoosh"), (TL["cta"] + 0.1, "pop"), (TL["end"], "whoosh"), (TL["end"] + 0.2, "pop")])
