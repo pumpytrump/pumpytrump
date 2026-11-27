@@ -118,7 +118,7 @@ def draw_frame(cr, t, fi, conf, cache):
                 pill(cr, txt, x, (300, 410, 300)[i], 58, col, scale=back((t - ts) / 0.25), rot=rot)
         if TL["ghost"] <= t < TL["capsule"]:
             outlined(cr, "*wird zum Gespenst*", W / 2, 330, 72, (0.85, 0.87, 0.9), sw=12, scale=back((t - TL["ghost"] - 0.2) / 0.3))
-        if TL["capsule"] <= t < TL["sun"] + 0.5:
+        if TL["capsule"] <= t < TL["sun"]:
             pill(cr, "1 KAPSEL", W / 2, 300, 66, (0.12, 0.12, 0.14), scale=back((t - TL["capsule"]) / 0.25), rot=-3)
             pill(cr, "5.600 I.E. D3 + 200 µg K2", W / 2, 415, 46, PINK, scale=back((t - TL["capsule"] - 0.3) / 0.25), rot=2)
         if TL["sun"] <= t < TL["k120"]:
