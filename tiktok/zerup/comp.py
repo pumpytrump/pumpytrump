@@ -1,0 +1,169 @@
+#!/usr/bin/env python3
+"""Composite ZERUP Blender frames + overlays + voice/SFX -> out/8_more_zerup_3d.mp4
+COMP_TEST=1.0,6.0 python3 comp.py   -> still previews"""
+import glob, json, math, os, subprocess, sys
+import cairo
+from PIL import Image, ImageFilter
+HERE = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, os.path.join(HERE, "..", "stick"))
+from make import (outlined, pill, rrect, font, captions, sfx_track, write_wav, back, ease, Particles, surf_from_pil, draw_img, W, H, YEL, WHITE)
+
+A = os.path.join(HERE, "assets"); OUT = os.path.join(HERE, "out")
+FPS, SRC_FPS = 30, 24
+wj = json.load(open(os.path.join(A, "words.json"))); T = [w[1] for w in wj]
+TL = dict(medium=1.1, pour=1.9, ice=3.86, zero=5.66, drink=7.74, shades=9.3, sorten=11.2, cta=14.08, end=16.3)
+TOTAL = 17.4
+RED = (0.93, 0.16, 0.2); PINK = (0.86, 0.22, 0.38); DARK = (0.12, 0.1, 0.12); GOLD1 = (1.0, 0.86, 0.3); GOLD2 = (0.85, 0.55, 0.05)
+frames = sorted(glob.glob(os.path.join(OUT, "frames", "[0-9][0-9][0-9][0-9].png")))
+anchors = {}
+for f in glob.glob(os.path.join(OUT, "frames", "anchors_*.json")): anchors.update(json.load(open(f)))
+NSRC = len(frames)
+bottle_s = surf_from_pil(Image.open(os.path.join(A, "bottle.png")))
+
+cw = ["More", "ZERUP!", "Ein", "Spritzer…", "und", "aus", "langweiligem", "Wasser", "wird", "Pfirsich-", "Eis-", "tee!",
+      "Null", "Zucker,", "null", "Kalorien.", "Mein", "Wasser", "hatte", "noch", "nie", "so", "viel", "Persönlichkeit!",
+      "Keine", "Lust", "auf", "Pfirsich?", "Die", "Sorten", "sind", "wählbar.", "Tipp", "unten", "links", "auf", "den",
+      "Shop", "und", "hol's", "dir!"]
+assert len(cw) == len(wj), (len(cw), len(wj))
+words = [(c, s, e) for c, (_, s, e) in zip(cw, wj)]
+
+def gold_text(cr, text, x, y, size, scale=1.0, rot=0.0):
+    if scale <= 0.05: return
+    cr.save(); cr.translate(x, y); cr.rotate(math.radians(rot)); cr.scale(scale, scale)
+    font(cr, size); e = cr.text_extents(text)
+    if e.x_advance > 940: cr.scale(940 / e.x_advance, 940 / e.x_advance)
+    cr.move_to(-e.x_advance / 2 + 8, size * 0.36 + 10); cr.text_path(text); cr.set_source_rgba(0, 0, 0, 0.45); cr.fill()
+    cr.move_to(-e.x_advance / 2, size * 0.36); cr.text_path(text)
+    cr.set_line_join(cairo.LINE_JOIN_ROUND); cr.set_source_rgb(0.15, 0.08, 0.02); cr.set_line_width(size * 0.16); cr.stroke_preserve()
+    g = cairo.LinearGradient(0, -size * 0.5, 0, size * 0.4)
+    g.add_color_stop_rgb(0, *GOLD1); g.add_color_stop_rgb(0.55, 1.0, 0.74, 0.15); g.add_color_stop_rgb(1, *GOLD2)
+    cr.set_source(g); cr.fill(); cr.restore()
+
+def badge(cr, t):
+    k = back((t - 0.2) / 0.3)
+    if k < 0.05 or t >= TL["end"]: return
+    cr.save(); cr.translate(60, 170); cr.scale(k, k)
+    font(cr, 30); txt = "MORE ZERUP · PEACH ICED TEA"; e = cr.text_extents(txt)
+    rrect(cr, 0, -28, e.x_advance + 84, 56, 28); cr.set_source_rgba(1, 1, 1, 0.92); cr.fill()
+    cr.arc(30, 0, 13, 0, 2 * math.pi); cr.set_source_rgb(*PINK); cr.fill()
+    cr.move_to(56, 11); cr.set_source_rgb(0.1, 0.1, 0.12); cr.show_text(txt); cr.restore()
+
+def sticker(cr, x, y, k, rot=-10):
+    """round red 'SORTEN WÄHLBAR' sticker like on the product photo"""
+    if k < 0.05: return
+    cr.save(); cr.translate(x, y); cr.rotate(math.radians(rot)); cr.scale(k, k)
+    cr.arc(6, 10, 120, 0, 2 * math.pi); cr.set_source_rgba(0, 0, 0, 0.25); cr.fill()
+    cr.arc(0, 0, 120, 0, 2 * math.pi); cr.set_source_rgb(*RED); cr.fill_preserve(); cr.set_source_rgb(1, 1, 1); cr.set_line_width(6); cr.stroke()
+    for i, txt in enumerate(("SORTEN", "WÄHLBAR")):
+        font(cr, 44); e = cr.text_extents(txt); cr.move_to(-e.x_advance / 2, -6 + i * 52); cr.set_source_rgb(1, 1, 1); cr.show_text(txt)
+    cr.restore()
+
+def anchor_px(anc, key):
+    x, y, _ = anc[key]; return x * W, y * H
+
+def product_card(cr, t):
+    k = back((t - TL["cta"] - 0.1) / 0.35)
+    if k < 0.05: return
+    cr.save(); cr.translate(330, 1250); cr.scale(k, k)
+    rrect(cr, -290, -110, 600, 220, 26); cr.set_source_rgba(1, 1, 1, 0.97); cr.fill()
+    draw_img(cr, bottle_s, -215, 0, 180)
+    font(cr, 40); cr.set_source_rgb(0.1, 0.1, 0.12); cr.move_to(-130, -40); cr.show_text("MORE ZERUP")
+    font(cr, 27); cr.set_source_rgb(0.35, 0.35, 0.4); cr.move_to(-130, 0); cr.show_text("Peach Iced Tea · 0 Zucker")
+    font(cr, 27); cr.set_source_rgb(0.35, 0.35, 0.4); cr.move_to(-130, 38); cr.show_text("Sorten wählbar")
+    font(cr, 27); cr.set_source_rgb(*RED); cr.move_to(-130, 80); cr.show_text("TIPP UNTEN LINKS")
+    cr.restore()
+
+def red_arrow(cr, t, t0, x=150, y=1690):
+    k = back((t - t0) / 0.3)
+    if k < 0.05: return
+    bob = 18 * math.sin((t - t0) * 9)
+    cr.save(); cr.translate(x - bob * 0.7, y + bob); cr.rotate(math.radians(45)); cr.scale(k, k)
+    cr.move_to(0, 110); cr.line_to(-80, 10); cr.line_to(-30, 10); cr.line_to(-30, -110); cr.line_to(30, -110)
+    cr.line_to(30, 10); cr.line_to(80, 10); cr.close_path()
+    cr.set_source_rgb(*RED); cr.fill_preserve(); cr.set_source_rgb(1, 1, 1); cr.set_line_width(7); cr.stroke(); cr.restore()
+
+def end_card(cr, t):
+    u = t - TL["end"]
+    g = cairo.LinearGradient(0, 0, 0, H); g.add_color_stop_rgb(0, 1, 1, 1); g.add_color_stop_rgb(1, 1, 0.93, 0.9)
+    cr.set_source(g); cr.paint()
+    font(cr, 96); txt = "MORE ZERUP"; e = cr.text_extents(txt)
+    cr.move_to(W / 2 - e.x_advance / 2, 330); cr.set_source_rgb(0.1, 0.08, 0.1); cr.show_text(txt)
+    kk = back(u / 0.35)
+    if kk > 0.05: draw_img(cr, bottle_s, W / 2, 790, 720 * (1 + 0.04 * u) * kk)
+    sticker(cr, 250, 960, back((u - 0.25) / 0.3))
+    font(cr, 44); txt = "0 Zucker · 0 kcal · vegan"; e = cr.text_extents(txt)
+    cr.move_to(W / 2 - e.x_advance / 2, 1260); cr.set_source_rgb(0.3, 0.3, 0.35); cr.show_text(txt)
+    font(cr, 52); txt = "TIPP UNTEN LINKS AUF DEN SHOP"; e = cr.text_extents(txt)
+    cr.move_to(W / 2 - e.x_advance / 2, 1355); cr.set_source_rgb(*RED); cr.show_text(txt)
+    red_arrow(cr, t, TL["end"] + 0.2, 200, 1640)
+
+def draw_frame(cr, t, fi, conf, cache):
+    if t >= TL["end"]:
+        end_card(cr, t)
+    else:
+        si = min(int(t * SRC_FPS), NSRC - 1)
+        if si not in cache:
+            cache.clear()
+            im = Image.open(frames[si]).convert("RGBA").resize((W, H), Image.LANCZOS).filter(ImageFilter.UnsharpMask(1.0, 50, 2))
+            cache[si] = surf_from_pil(im)
+        cr.set_source_surface(cache[si], 0, 0); cr.paint()
+        anc = anchors.get(str(si))
+        badge(cr, t)
+        fade = 1 - ease((t - TL["pour"] + 0.15) / 0.2)
+        gold_text(cr, "AUS WASSER WIRD EISTEE?!", W / 2, 330, 110, scale=back(t / 0.35) * fade, rot=-3)
+        if fi == 1: conf.burst(W / 2, 600, 120, [(1, 0.85, 0.1), (1, 0.4, 0.5), (1, 0.6, 0.2), (1, 1, 1)], spd=1500, life=1.8, size=(9, 16), grav=1300, kind="rect")
+        conf.step_draw(cr, 1 / FPS)
+        if TL["medium"] <= t < TL["pour"]:
+            outlined(cr, "Wasser. Langweilig.", W / 2, 520, 62, WHITE, sw=12, scale=back((t - TL["medium"]) / 0.25) * (1 - ease((t - TL["pour"] + 0.1) / 0.1)))
+        if TL["pour"] <= t < TL["zero"] and anc:
+            gx, gy = anchor_px(anc, "glass")
+            pill(cr, "1 SPRITZER", gx + 250, gy - 420, 54, PINK, scale=back((t - TL["pour"] - 0.1) / 0.25), rot=-4)
+            if t >= TL["ice"] - 0.3:
+                gold_text(cr, "PFIRSICH-EISTEE!", W / 2, 330, 104, scale=back((t - TL["ice"] + 0.3) / 0.3), rot=-2)
+        if TL["zero"] <= t < TL["drink"] and anc:
+            bx, by = anchor_px(anc, "bottle")
+            for i, (txt, ts, col) in enumerate((("0 ZUCKER", T[12], PINK), ("0 KCAL", T[14], RED), ("VEGAN", T[15] + 0.4, (0.25, 0.6, 0.3)))):
+                pill(cr, txt, min(bx + 40, W - 200), by - 360 + i * 115, 54, col, scale=back((t - ts) / 0.25), rot=(-4, 3, -2)[i])
+        if TL["shades"] <= t < TL["sorten"]:
+            outlined(cr, "MEIN WASSER:", W / 2, 330, 72, WHITE, sw=12, scale=back((t - TL["shades"]) / 0.25))
+            gold_text(cr, "PERSÖNLICHKEIT", W / 2, 430, 100, scale=back((t - TL["shades"] - 0.15) / 0.3), rot=-2)
+        if TL["sorten"] <= t < TL["cta"]:
+            outlined(cr, "KEINE LUST AUF PFIRSICH?", W / 2, 330, 66, WHITE, sw=12, scale=back((t - TL["sorten"]) / 0.25))
+            if anc:
+                bx, by = anchor_px(anc, "bottle")
+                sticker(cr, min(bx + 230, W - 140), by - 120, back((t - T[29]) / 0.3) * (1 + 0.04 * math.sin(t * 6)))
+        if t >= TL["cta"]:
+            product_card(cr, t); red_arrow(cr, t, TL["cta"] + 0.25)
+        captions(cr, words, t, y=1520)
+    cr.rectangle(0, 0, W * t / TOTAL, 8); cr.set_source_rgb(*PINK); cr.fill()
+
+def main():
+    sfx = [(0.0, "boom"), (0.05, "tada"), (TL["medium"], "whoosh"), (TL["medium"] + 0.45, "pop"), (TL["pour"], "whoosh"),
+           (TL["pour"] + 0.1, "gulp"), (TL["ice"] + 0.15, "pop"), (TL["ice"] + 0.33, "pop"), (TL["ice"] + 0.51, "pop"),
+           (TL["ice"] + 0.75, "pop"), (TL["ice"] + 1.1, "whoosh"), (TL["zero"], "whoosh"), (T[12], "pop"), (T[14], "pop"),
+           (T[15] + 0.4, "pop"), (TL["drink"], "whoosh"), (TL["drink"] + 0.35, "gulp"), (TL["drink"] + 0.75, "gulp"),
+           (TL["shades"], "ding"), (TL["sorten"], "whoosh"), (T[29], "boing"), (TL["cta"], "whoosh"), (TL["cta"] + 0.1, "pop"),
+           (TL["end"], "whoosh"), (TL["end"] + 0.2, "pop")]
+    fx = sfx_track(sfx, TOTAL + 1); write_wav(os.path.join(OUT, "sfx.wav"), fx)
+    surf = cairo.ImageSurface(cairo.FORMAT_ARGB32, W, H)
+    dst = os.path.join(OUT, "8_more_zerup_3d.mp4")
+    ff = subprocess.Popen(["ffmpeg", "-loglevel", "error", "-y", "-f", "rawvideo", "-pix_fmt", "bgra", "-s", f"{W}x{H}", "-r", str(FPS),
+                           "-i", "-", "-i", os.path.join(A, "voice.wav"), "-i", os.path.join(OUT, "sfx.wav"),
+                           "-filter_complex", "[1:a]aresample=44100,apad[v];[2:a]volume=0.7[s];[v][s]amix=inputs=2:duration=first:normalize=0,loudnorm=I=-14:TP=-1.5[a]",
+                           "-map", "0:v", "-map", "[a]", "-t", f"{TOTAL:.3f}", "-c:v", "libx264", "-preset", "slow", "-crf", "16",
+                           "-pix_fmt", "yuv420p", "-c:a", "aac", "-b:a", "192k", "-ar", "48000", "-movflags", "+faststart", dst],
+                          stdin=subprocess.PIPE)
+    conf = Particles(11); cache = {}
+    for fi in range(int(TOTAL * FPS)):
+        cr = cairo.Context(surf); draw_frame(cr, fi / FPS, fi, conf, cache)
+        surf.flush(); ff.stdin.write(bytes(surf.get_data()))
+    ff.stdin.close(); ff.wait(); print("->", dst, f"{TOTAL:.1f}s")
+
+if __name__ == "__main__":
+    if os.environ.get("COMP_TEST"):
+        surf = cairo.ImageSurface(cairo.FORMAT_ARGB32, W, H); conf = Particles(11)
+        for ts in os.environ["COMP_TEST"].split(","):
+            t = float(ts); cr = cairo.Context(surf); draw_frame(cr, t, int(t * FPS), conf, {})
+            surf.write_to_png(os.path.join(OUT, f"ctest_{t:05.2f}.png"))
+    else:
+        main()
