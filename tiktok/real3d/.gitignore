@@ -3,3 +3,6 @@ out/ctest_*.png
 out/sfx.wav
 out/render.log
 out/test.log
+out/render2.log
+out/preview_start.mp4
+__pycache__/
