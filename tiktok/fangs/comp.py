@@ -44,7 +44,7 @@ cfg.card_title = "SUPRENT FANGS"; cfg.card_lines = ["13.000 U/min · KI-Motor", 
 cfg.end_title = "SUPRENT FANGS"; cfg.end_sub = "13.000 U/min · KI-Power · 2 Farben"; cfg.end_bg = (0.88, 1.0, 0.9); cfg.end_img_h = 760
 cfg.captions = ["Suprent", "FANGS!", "13.000", "", "Umdrehungen!", "Mein", "Barber", "hat", "Urlaub…", "also", "mach", "ich's", "halt",
                 "selbst.", "Dicke", "Haare?", "Kein", "Ziepen,", "kein", "Zerren.", "Zack,", "sauberer", "Fade!", "Die", "KI", "passt",
-                "die", "Power", "automatisch", "an.", "In", "Schwarz", "-Grün", "oder", "Pink.", "Tipp", "unten", "links", "und", "hol", "ihn", "dir!"]
+                "die", "Power", "automatisch", "an.", "In", "Schwarz-Grün", "", "oder", "Pink.", "Tipp", "unten", "links", "und", "hol", "ihn", "dir!"]
 cfg.overlays = overlays
 cfg.deal = "BLACK FRIDAY: -11 % → 169,99 €"
 cfg.sfx = ([(0.0, "boom"), (0.05, "tada"), (T[2], "whoosh"), (1.5, "buzz"), (TL["barber"], "whoosh"), (T[6], "pop"), (TL["self"] + 0.4, "whoosh"),
