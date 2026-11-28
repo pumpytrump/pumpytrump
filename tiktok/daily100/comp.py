@@ -65,7 +65,7 @@ cfg.card_title = "MORE DAILY100"; cfg.card_lines = ["-50 %: 44,00 € statt 87,9
 cfg.end_title = "MORE DAILY100"; cfg.end_sub = "BLACK FRIDAY: 44,00 € statt 87,99 €"; cfg.end_bg = (1.0, 0.9, 0.95); cfg.end_img_h = 700
 cfg.end_note = "Nahrungsergänzungsmittel. Kein Ersatz für eine ausgewogene Ernährung."
 cfg.captions = ["More", "DAILY", "100!", "Deine", "tägliche", "Routine", "in", "einer", "Box:", "Jeden", "Tag", "ein", "Sachet,", "mit",
-                "Wasser mixen,", "trinken,", "fertig!", "Vier", "Wochen,", "ein", "Smoothie", "-Mix", "mit", "Vitaminen.", "Und", "jetzt",
+                "Wasser mixen,", "trinken,", "fertig!", "Vier", "Wochen,", "ein", "Smoothie-Mix", "", "mit", "Vitaminen.", "Und", "jetzt",
                 "kommt's:", "Minus", "50", "Prozent!", "Statt", "88", "nur", "44", "Euro!", "Tipp", "unten", "links", "und", "schnapp's", "dir!"]
 cfg.overlays = overlays
 cfg.sfx = ([(0.0, "boom"), (0.05, "tada"), (0.5, "whoosh"), (TL["box"], "whoosh"), (T[5], "pop"), (TL["sachet"], "pop"), (TL["mix"], "crack"),
