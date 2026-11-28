@@ -1,0 +1,76 @@
+{
+ "id": "elusa384",
+ "n": 25,
+ "title": "ELUSA 384",
+ "badge": "ELUSA · 384 EXTRAIT DE PARFUM",
+ "voice_id": "prhcTCMZO2tEReVq7XuJ",
+ "voice": "[softly] Elusa 384, Extrait de Parfum. [sighs] Mein alter Duft? Einfach nur langweilig. [excited] Ein Sprüher: Honig, Gewürze, warm wie eine Umarmung! Gerade 20 Prozent günstiger, ab 23,70 Euro! Tipp unten links!",
+ "kw": {
+  "problem": "Mein",
+  "use": "Ein",
+  "price": "Gerade",
+  "cta": "Tipp"
+ },
+ "room": "dressing",
+ "mood": "sad",
+ "action": "spray",
+ "particle": "#f5efe0",
+ "accent": "#c08a3a",
+ "h": 0.26,
+ "thick": 0.06,
+ "round": 0.2,
+ "price": "ab 23,70 €",
+ "pct": "-20 %",
+ "char": {
+  "female": true,
+  "hair": "long",
+  "beard": null,
+  "tee": [
+   0.12,
+   0.1,
+   0.12
+  ],
+  "shirt": [
+   0.12,
+   0.1,
+   0.12
+  ],
+  "shirt2": [
+   0.096,
+   0.08000000000000002,
+   0.096
+  ],
+  "hair_col": [
+   0.25,
+   0.15,
+   0.1
+  ],
+  "skin": [
+   0.86,
+   0.66,
+   0.54
+  ],
+  "open_shirt": false
+ },
+ "pills": [
+  [
+   "langweilig",
+   "LANGWEILIG…",
+   "#555555"
+  ],
+  [
+   "Honig",
+   "HONIG & GEWÜRZE",
+   "#c08a3a"
+  ]
+ ],
+ "card_lines": [
+  "Extrait de Parfum",
+  "ab 23,70 € (-20 %)"
+ ],
+ "end_sub": "AB 23,70 € · -20 %",
+ "out": "25_elusa384_3d.mp4",
+ "card_title": "ELUSA 384",
+ "deal": "BLACK FRIDAY DEAL",
+ "frames": "0-390"
+}

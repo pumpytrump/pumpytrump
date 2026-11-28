@@ -1,0 +1,70 @@
+{
+ "id": "mexican",
+ "n": 26,
+ "title": "CHILI-ADVENTSKALENDER",
+ "badge": "MEXICAN TEARS · CHILISAUCEN-ADVENTSKALENDER",
+ "voice_id": "XcorKvP1KdIM2TL5vtZ1",
+ "voice": "[excited] Ein Adventskalender, aber mit Chilisaucen: Mexican Tears! [laughs] Jeden Tag eine neue Sauce. Tür eins: noch okay. Tür zwei: Feuer! [excited] Für 79,90 Euro. Tipp unten links!",
+ "kw": {
+  "problem": "Jeden",
+  "use": "Tür",
+  "price": "Für",
+  "cta": "Tipp"
+ },
+ "room": "kitchen",
+ "mood": "excited",
+ "action": "fire",
+ "particle": "#dddddd",
+ "accent": "#e2261c",
+ "h": 0.32,
+ "thick": 0.1,
+ "round": 0.15,
+ "price": "79,90 €",
+ "char": {
+  "female": false,
+  "hair": "short",
+  "beard": "full",
+  "tee": [
+   0.9,
+   0.85,
+   0.75
+  ],
+  "shirt": [
+   0.15,
+   0.15,
+   0.18
+  ],
+  "hair_col": [
+   0.15,
+   0.09,
+   0.05
+  ],
+  "skin": [
+   0.82,
+   0.6,
+   0.47
+  ],
+  "open_shirt": true
+ },
+ "pills": [
+  [
+   "eins",
+   "TÜR 1: OKAY",
+   "#333333"
+  ],
+  [
+   "Feuer",
+   "TÜR 2: FEUER!",
+   "#e2261c"
+  ]
+ ],
+ "card_lines": [
+  "Jeden Tag eine neue Sauce",
+  "79,90 €"
+ ],
+ "end_sub": "79,90 €",
+ "out": "26_mexican_3d.mp4",
+ "card_title": "CHILI-ADVENTSKALENDER",
+ "deal": "BLACK FRIDAY DEAL",
+ "frames": "0-329"
+}

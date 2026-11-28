@@ -111,6 +111,7 @@ def run(cfg):
             if si not in cache:
                 cache.clear()
                 im = Image.open(frames[si]).convert("RGBA").resize((W, H), Image.LANCZOS).filter(ImageFilter.UnsharpMask(1.0, 50, 2))
+                if getattr(cfg, "post", None): im = cfg.post(im)
                 cache[si] = surf_from_pil(im)
             cr.set_source_surface(cache[si], 0, 0); cr.paint()
             anc = anchors.get(str(si))
@@ -125,8 +126,8 @@ def run(cfg):
                     pill(cr, deal, 0, 0, 60, RED); cr.restore()
             conf.step_draw(cr, 1 / FPS)
             if t >= TL["cta"]:
-                product_card(cr, t); red_arrow(cr, t, TL["cta"] + 0.25)
-            captions(cr, words, t, y=1520)
+                (getattr(cfg, "card_fn", None) or product_card)(cr, t); red_arrow(cr, t, TL["cta"] + 0.25)
+            getattr(cfg, "captions_fn", captions)(cr, words, t, y=getattr(cfg, "cap_y", 1520))
         cr.rectangle(0, 0, W * t / TOTAL, 8); cr.set_source_rgb(*cfg.accent); cr.fill()
 
     if os.environ.get("COMP_TEST"):

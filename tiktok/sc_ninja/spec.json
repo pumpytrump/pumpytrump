@@ -1,0 +1,71 @@
+{
+ "id": "ninja",
+ "n": 17,
+ "title": "NINJA DUALZONE",
+ "badge": "NINJA · DUALZONE HEISSLUFTFRITTEUSE",
+ "voice_id": "ucRSf046SQyHREQLH4JR",
+ "voice": "[excited] Ninja DualZone Heißluftfritteuse! [annoyed] Pommes oder Hähnchen? Ich kann mich nie entscheiden. [excited] Warum nicht beides? Zwei Körbe, zwei Gerichte, alles gleichzeitig fertig! Black Friday: 20 Prozent günstiger, nur 139,99 Euro! Tipp unten links!",
+ "kw": {
+  "problem": "Pommes",
+  "use": "Warum",
+  "price": "Black",
+  "cta": "Tipp"
+ },
+ "room": "kitchen",
+ "mood": "annoyed",
+ "action": "show",
+ "container": "plate",
+ "accent": "#e8473c",
+ "h": 0.24,
+ "thick": 0.24,
+ "round": 0.2,
+ "price": "139,99 €",
+ "pct": "-20 %",
+ "deal": "BLACK FRIDAY -20 %",
+ "char": {
+  "female": false,
+  "hair": "short",
+  "beard": "stubble",
+  "tee": [
+   0.93,
+   0.92,
+   0.88
+  ],
+  "shirt": [
+   0.85,
+   0.3,
+   0.25
+  ],
+  "hair_col": [
+   0.15,
+   0.09,
+   0.05
+  ],
+  "skin": [
+   0.82,
+   0.6,
+   0.47
+  ],
+  "open_shirt": true
+ },
+ "pills": [
+  [
+   "Pommes",
+   "POMMES ODER HÄHNCHEN?",
+   "#333333"
+  ],
+  [
+   "Zwei",
+   "2 KÖRBE · 2 GERICHTE",
+   "#e8473c"
+  ]
+ ],
+ "card_lines": [
+  "2 Körbe · 2 Gerichte gleichzeitig",
+  "Black Friday: 139,99 € (-20 %)"
+ ],
+ "end_sub": "BLACK FRIDAY: 139,99 € · -20 %",
+ "out": "17_ninja_3d.mp4",
+ "card_title": "NINJA DUALZONE",
+ "frames": "0-394"
+}

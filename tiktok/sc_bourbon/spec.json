@@ -1,0 +1,76 @@
+{
+ "id": "bourbon",
+ "n": 22,
+ "title": "BOURBON-VANILLE HONIG",
+ "badge": "IMKERMEISTER KRÜGER · HONIG",
+ "voice_id": "gSZiss4v1BGsE1cTgoWF",
+ "voice": "[softly] Honig mit echter Bourbon-Vanille. [sighs] Mein Tee war immer so langweilig. [excited] Ein Löffel rein, und plötzlich schmeckt er wie ein Dessert! Nur 8 Euro, und bei zwei Gläsern sparst du 5 Prozent. Tipp unten links!",
+ "kw": {
+  "problem": "Mein",
+  "use": "Ein",
+  "price": "Nur",
+  "cta": "Tipp"
+ },
+ "room": "kitchen",
+ "mood": "sad",
+ "action": "pour",
+ "container": "mug",
+ "liquid": "#c8894a",
+ "particle": "#e0a020",
+ "accent": "#e0a020",
+ "h": 0.2,
+ "price": "8,00 €",
+ "pct": "2× -5 %",
+ "char": {
+  "female": true,
+  "hair": "long",
+  "beard": null,
+  "tee": [
+   0.6,
+   0.75,
+   0.9
+  ],
+  "shirt": [
+   0.6,
+   0.75,
+   0.9
+  ],
+  "shirt2": [
+   0.48,
+   0.6000000000000001,
+   0.7200000000000001
+  ],
+  "hair_col": [
+   0.55,
+   0.38,
+   0.2
+  ],
+  "skin": [
+   0.86,
+   0.66,
+   0.54
+  ],
+  "open_shirt": false
+ },
+ "pills": [
+  [
+   "Tee",
+   "LANGWEILIGER TEE",
+   "#555555"
+  ],
+  [
+   "Dessert",
+   "WIE EIN DESSERT",
+   "#e0a020"
+  ]
+ ],
+ "card_lines": [
+  "Honig mit Bourbon-Vanille",
+  "8 € · Kauf 2, spar 5 %"
+ ],
+ "end_sub": "8 € · KAUF 2, SPAR 5 %",
+ "out": "22_bourbon_3d.mp4",
+ "card_title": "BOURBON-VANILLE HONIG",
+ "deal": "BLACK FRIDAY DEAL",
+ "frames": "0-324"
+}

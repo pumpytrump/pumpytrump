@@ -1,0 +1,79 @@
+{
+ "id": "flavourup",
+ "n": 30,
+ "title": "FLAVOUR UP",
+ "badge": "PROFUEL · FLAVOUR UP CHOCO MILKY",
+ "voice_id": "gSZiss4v1BGsE1cTgoWF",
+ "voice": "[excited] ProFuel Flavour Up, Choco Milky! [sighs] Joghurt pur? Ehrlich, langweilig. [excited] Ein Löffel Flavour Up rein, und es schmeckt nach Kindheit! Ab 12,88 Euro statt 13,56! Tipp unten links!",
+ "kw": {
+  "problem": "Joghurt",
+  "use": "Ein",
+  "price": "Ab",
+  "cta": "Tipp"
+ },
+ "room": "kitchen",
+ "mood": "sad",
+ "action": "pour",
+ "container": "bowl",
+ "liquid": "#f5f2ea",
+ "particle": "#6b3d22",
+ "accent": "#8a5230",
+ "h": 0.22,
+ "thick": 0.12,
+ "round": 0.3,
+ "price": "ab 12,88 €",
+ "old": "13,56 €",
+ "pct": "-5 %",
+ "char": {
+  "female": true,
+  "hair": "long",
+  "beard": null,
+  "tee": [
+   0.55,
+   0.4,
+   0.75
+  ],
+  "shirt": [
+   0.55,
+   0.4,
+   0.75
+  ],
+  "shirt2": [
+   0.44000000000000006,
+   0.32000000000000006,
+   0.6000000000000001
+  ],
+  "hair_col": [
+   0.55,
+   0.38,
+   0.2
+  ],
+  "skin": [
+   0.86,
+   0.66,
+   0.54
+  ],
+  "open_shirt": false
+ },
+ "pills": [
+  [
+   "langweilig",
+   "LANGWEILIG…",
+   "#555555"
+  ],
+  [
+   "Kindheit",
+   "SCHMECKT NACH KINDHEIT",
+   "#8a5230"
+  ]
+ ],
+ "card_lines": [
+  "Geschmackspulver, z. B. Choco Milky",
+  "ab 12,88 € statt 13,56 €"
+ ],
+ "end_sub": "AB 12,88 € STATT 13,56 €",
+ "out": "30_flavourup_3d.mp4",
+ "card_title": "FLAVOUR UP",
+ "deal": "BLACK FRIDAY DEAL",
+ "frames": "0-346"
+}

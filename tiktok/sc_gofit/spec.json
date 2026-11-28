@@ -1,0 +1,78 @@
+{
+ "id": "gofit",
+ "n": 35,
+ "title": "ZERO SYRUP",
+ "badge": "GOFITNESS · ZERO SYRUP 65 ML",
+ "voice_id": "gSZiss4v1BGsE1cTgoWF",
+ "voice": "[excited] GoFitness Zero Syrup! [sighs] Wasser trinken? Ja, aber es ist so langweilig. [excited] Ein Spritzer, und es schmeckt nach Wassermelone! Null Zucker, null Kalorien, vegan. Nur 5,19 Euro, bei drei Flaschen 5 Prozent sparen! Tipp unten links!",
+ "kw": {
+  "problem": "Wasser",
+  "use": "Ein",
+  "price": "Nur",
+  "cta": "Tipp"
+ },
+ "room": "gym",
+ "mood": "sad",
+ "action": "pour_drink",
+ "container": "glass",
+ "liquid": "#ff8a96",
+ "particle": "#ff4060",
+ "accent": "#ff4060",
+ "h": 0.24,
+ "thick": 0.06,
+ "round": 0.3,
+ "price": "5,19 €",
+ "pct": "3× -5 %",
+ "char": {
+  "female": true,
+  "hair": "long",
+  "beard": null,
+  "tee": [
+   0.15,
+   0.6,
+   0.6
+  ],
+  "shirt": [
+   0.15,
+   0.6,
+   0.6
+  ],
+  "shirt2": [
+   0.12,
+   0.48,
+   0.48
+  ],
+  "hair_col": [
+   0.55,
+   0.38,
+   0.2
+  ],
+  "skin": [
+   0.86,
+   0.66,
+   0.54
+  ],
+  "open_shirt": false
+ },
+ "pills": [
+  [
+   "langweilig",
+   "LANGWEILIG…",
+   "#555555"
+  ],
+  [
+   "Null",
+   "0 ZUCKER · 0 KCAL · VEGAN",
+   "#ff4060"
+  ]
+ ],
+ "card_lines": [
+  "0 Zucker · 0 Kalorien · vegan",
+  "5,19 € · Kauf 3, spar 5 %"
+ ],
+ "end_sub": "5,19 € · KAUF 3, SPAR 5 %",
+ "out": "35_gofit_3d.mp4",
+ "card_title": "ZERO SYRUP",
+ "deal": "BLACK FRIDAY DEAL",
+ "frames": "0-389"
+}

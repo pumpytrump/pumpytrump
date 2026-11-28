@@ -1,0 +1,72 @@
+{
+ "id": "pizza",
+ "n": 31,
+ "title": "PROTEIN-PIZZABODEN",
+ "badge": "MORE TASTE · HIGH-PROTEIN PIZZABODEN",
+ "voice_id": "ucRSf046SQyHREQLH4JR",
+ "voice": "[excited] Pizza-Abend, aber mit Protein! [sighs] Normale Pizza, und danach direkt Sofa-Koma. [excited] Der High-Protein Pizzaboden von More Taste: belegen, backen, fertig! Gerade nur 14,99 Euro statt 16,19! Tipp unten links!",
+ "kw": {
+  "problem": "Normale",
+  "use": "Der",
+  "price": "Gerade",
+  "cta": "Tipp"
+ },
+ "room": "kitchen",
+ "mood": "tired",
+ "action": "show",
+ "container": "pizza",
+ "accent": "#7b4fd0",
+ "h": 0.28,
+ "thick": 0.04,
+ "round": 0.3,
+ "price": "14,99 €",
+ "old": "16,19 €",
+ "pct": "-7 %",
+ "char": {
+  "female": false,
+  "hair": "short",
+  "beard": "stubble",
+  "tee": [
+   0.93,
+   0.92,
+   0.88
+  ],
+  "shirt": [
+   0.55,
+   0.3,
+   0.7
+  ],
+  "hair_col": [
+   0.15,
+   0.09,
+   0.05
+  ],
+  "skin": [
+   0.82,
+   0.6,
+   0.47
+  ],
+  "open_shirt": true
+ },
+ "pills": [
+  [
+   "Koma",
+   "SOFA-KOMA",
+   "#555555"
+  ],
+  [
+   "belegen",
+   "BELEGEN · BACKEN · FERTIG",
+   "#7b4fd0"
+  ]
+ ],
+ "card_lines": [
+  "High-Protein Pizzaboden",
+  "14,99 € statt 16,19 €"
+ ],
+ "end_sub": "14,99 € STATT 16,19 €",
+ "out": "31_pizza_3d.mp4",
+ "card_title": "PROTEIN-PIZZABODEN",
+ "deal": "BLACK FRIDAY DEAL",
+ "frames": "0-383"
+}

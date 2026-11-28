@@ -1,0 +1,71 @@
+{
+ "id": "creatin",
+ "n": 19,
+ "title": "PROFUEL CREATIN",
+ "badge": "PROFUEL · CREATIN MONOHYDRAT",
+ "voice_id": "XcorKvP1KdIM2TL5vtZ1",
+ "voice": "[excited] ProFuel Creatin Monohydrat! [sighs] Montag, Push Day, und mein Shaker ist leer. [excited] Also: ein Löffel in den Shaker, schütteln, trinken. Kreatin erhöht die körperliche Leistung bei Schnellkrafttraining. Ab 10,46 Euro! Tipp unten links!",
+ "kw": {
+  "problem": "Montag",
+  "use": "Also",
+  "price": "Kreatin",
+  "cta": "Tipp"
+ },
+ "room": "gym",
+ "mood": "sad",
+ "action": "pour_drink",
+ "container": "shaker",
+ "liquid": "#eeeeee",
+ "particle": "#ffffff",
+ "accent": "#2f7de1",
+ "h": 0.26,
+ "price": "ab 10,46 €",
+ "char": {
+  "female": false,
+  "hair": "short",
+  "beard": "stubble",
+  "tee": [
+   0.2,
+   0.45,
+   0.85
+  ],
+  "shirt": [
+   0.12,
+   0.12,
+   0.14
+  ],
+  "hair_col": [
+   0.15,
+   0.09,
+   0.05
+  ],
+  "skin": [
+   0.82,
+   0.6,
+   0.47
+  ],
+  "open_shirt": true
+ },
+ "notice": "Kreatin erhöht die körperliche Leistung bei Schnellkrafttraining (ab 3 g täglich). Nahrungsergänzungsmittel. Kein Ersatz für eine ausgewogene, abwechslungsreiche Ernährung.",
+ "pills": [
+  [
+   "Push",
+   "PUSH DAY",
+   "#2f7de1"
+  ],
+  [
+   "Shaker,",
+   "AB IN DEN SHAKER",
+   "#222222"
+  ]
+ ],
+ "card_lines": [
+  "Kreatin-Pulver · Black-Friday-Deal",
+  "ab 10,46 €"
+ ],
+ "end_sub": "BLACK FRIDAY: AB 10,46 €",
+ "out": "19_creatin_3d.mp4",
+ "card_title": "PROFUEL CREATIN",
+ "deal": "BLACK FRIDAY DEAL",
+ "frames": "0-389"
+}

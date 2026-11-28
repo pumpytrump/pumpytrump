@@ -1,0 +1,76 @@
+{
+ "id": "richcreamy",
+ "n": 33,
+ "title": "RICH & CREAMY",
+ "badge": "MORE NUTRITION · RICH & CREAMY",
+ "voice_id": "mPoK2MnknRxMK1ue0VTP",
+ "voice": "[excited] More Rich and Creamy, Dark Chocolate! [sighs] Mein Kaffee? Wässrig und traurig. [excited] Jetzt: noch cremiger, noch schokoladiger! Mein Barista ist offiziell eifersüchtig. Gerade 20 Prozent günstiger: 35,99 Euro! Tipp unten links!",
+ "kw": {
+  "problem": "Mein",
+  "use": "Jetzt",
+  "price": "Gerade",
+  "cta": "Tipp"
+ },
+ "room": "cafe",
+ "mood": "sad",
+ "action": "pour_drink",
+ "container": "glass",
+ "liquid": "#6b4430",
+ "particle": "#4a2c1c",
+ "accent": "#b04a7a",
+ "h": 0.26,
+ "price": "35,99 €",
+ "pct": "-20 %",
+ "char": {
+  "female": true,
+  "hair": "long",
+  "beard": null,
+  "tee": [
+   0.95,
+   0.9,
+   0.85
+  ],
+  "shirt": [
+   0.95,
+   0.9,
+   0.85
+  ],
+  "shirt2": [
+   0.76,
+   0.7200000000000001,
+   0.68
+  ],
+  "hair_col": [
+   0.55,
+   0.38,
+   0.2
+  ],
+  "skin": [
+   0.86,
+   0.66,
+   0.54
+  ],
+  "open_shirt": false
+ },
+ "pills": [
+  [
+   "Wässrig",
+   "WÄSSRIG & TRAURIG",
+   "#555555"
+  ],
+  [
+   "Barista",
+   "BARISTA: EIFERSÜCHTIG",
+   "#b04a7a"
+  ]
+ ],
+ "card_lines": [
+  "Protein Iced Coffee, z. B. Dark Chocolate",
+  "35,99 € (-20 %)"
+ ],
+ "end_sub": "35,99 € · -20 %",
+ "out": "33_richcreamy_3d.mp4",
+ "card_title": "RICH & CREAMY",
+ "deal": "BLACK FRIDAY DEAL",
+ "frames": "0-388"
+}

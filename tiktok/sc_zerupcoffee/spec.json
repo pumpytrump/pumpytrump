@@ -1,0 +1,72 @@
+{
+ "id": "zerupcoffee",
+ "n": 34,
+ "title": "ZERUP FÜR KAFFEE",
+ "badge": "MORE NUTRITION · ZERUP COFFEE",
+ "voice_id": "kHfXYCwbOq00KgBegten",
+ "voice": "[excited] More Zerup für Kaffee! [sighs] Mein Bürokaffee schmeckt nach Pappe. [excited] Ein Spritzer Zerup Cinnamon, und er schmeckt wie im Coffeeshop! Null Zucker. Gerade nur 6,15 Euro statt 6,99! Tipp unten links!",
+ "kw": {
+  "problem": "Mein",
+  "use": "Ein",
+  "price": "Gerade",
+  "cta": "Tipp"
+ },
+ "room": "office",
+ "mood": "tired",
+ "action": "pour_drink",
+ "container": "mug",
+ "liquid": "#5a3a24",
+ "particle": "#b07040",
+ "accent": "#c0603a",
+ "h": 0.26,
+ "price": "6,15 €",
+ "old": "6,99 €",
+ "pct": "-12 %",
+ "char": {
+  "female": false,
+  "hair": "short",
+  "beard": "stubble",
+  "tee": [
+   0.95,
+   0.95,
+   0.95
+  ],
+  "shirt": [
+   0.35,
+   0.4,
+   0.5
+  ],
+  "hair_col": [
+   0.15,
+   0.09,
+   0.05
+  ],
+  "skin": [
+   0.82,
+   0.6,
+   0.47
+  ],
+  "open_shirt": true
+ },
+ "pills": [
+  [
+   "Pappe",
+   "SCHMECKT NACH PAPPE",
+   "#555555"
+  ],
+  [
+   "Null",
+   "0 ZUCKER",
+   "#c0603a"
+  ]
+ ],
+ "card_lines": [
+  "z. B. Cinnamon · 0 Zucker",
+  "6,15 € statt 6,99 €"
+ ],
+ "end_sub": "6,15 € STATT 6,99 €",
+ "out": "34_zerupcoffee_3d.mp4",
+ "card_title": "ZERUP FÜR KAFFEE",
+ "deal": "BLACK FRIDAY DEAL",
+ "frames": "0-345"
+}

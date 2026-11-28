@@ -1,0 +1,77 @@
+{
+ "id": "rocka",
+ "n": 20,
+ "title": "ROCKA PROTEIN SHAKE",
+ "badge": "ROCKA NUTRITION · PROTEIN SHAKE",
+ "voice_id": "prhcTCMZO2tEReVq7XuJ",
+ "voice": "[excited] Rocka Protein Shake, Chai Latte! [sighs] Ich wollte ins Café, aber mein Konto sagt nein. [excited] Also: Shake mixen, trinken, schmeckt wie im Café! Gerade ab 12,74 Euro statt 14,24! Tipp unten links!",
+ "kw": {
+  "problem": "Ich",
+  "use": "Also",
+  "price": "Gerade",
+  "cta": "Tipp"
+ },
+ "room": "cafe",
+ "mood": "sad",
+ "action": "pour_drink",
+ "container": "glass",
+ "liquid": "#d9b48a",
+ "particle": "#c79a6a",
+ "accent": "#c9772b",
+ "h": 0.26,
+ "price": "ab 12,74 €",
+ "old": "14,24 €",
+ "pct": "-11 %",
+ "char": {
+  "female": true,
+  "hair": "long",
+  "beard": null,
+  "tee": [
+   0.35,
+   0.55,
+   0.45
+  ],
+  "shirt": [
+   0.35,
+   0.55,
+   0.45
+  ],
+  "shirt2": [
+   0.27999999999999997,
+   0.44000000000000006,
+   0.36000000000000004
+  ],
+  "hair_col": [
+   0.55,
+   0.38,
+   0.2
+  ],
+  "skin": [
+   0.86,
+   0.66,
+   0.54
+  ],
+  "open_shirt": false
+ },
+ "pills": [
+  [
+   "Konto",
+   "KONTO SAGT NEIN",
+   "#444444"
+  ],
+  [
+   "schmeckt",
+   "WIE IM CAFÉ",
+   "#c9772b"
+  ]
+ ],
+ "card_lines": [
+  "z. B. Chai Latte",
+  "ab 12,74 € statt 14,24 €"
+ ],
+ "end_sub": "AB 12,74 € STATT 14,24 €",
+ "out": "20_rocka_3d.mp4",
+ "card_title": "ROCKA PROTEIN SHAKE",
+ "deal": "BLACK FRIDAY DEAL",
+ "frames": "0-390"
+}

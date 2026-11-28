@@ -1,0 +1,74 @@
+{
+ "id": "wabe",
+ "n": 32,
+ "title": "WABENHONIG",
+ "badge": "DEUTSCHER WABENHONIG",
+ "voice_id": "prhcTCMZO2tEReVq7XuJ",
+ "voice": "[softly] Echter deutscher Wabenhonig, direkt in der Wabe! [sighs] Ich wusste nicht, was ich verschenken soll. [excited] Jetzt weiß ich's: Honig, so wie die Bienen ihn machen! Für 22 Euro. Tipp unten links!",
+ "kw": {
+  "problem": "Ich",
+  "use": "Jetzt",
+  "price": "Für",
+  "cta": "Tipp"
+ },
+ "room": "kitchen",
+ "mood": "sad",
+ "action": "show",
+ "accent": "#e8a317",
+ "h": 0.28,
+ "thick": 0.08,
+ "round": 0.2,
+ "price": "22,00 €",
+ "char": {
+  "female": true,
+  "hair": "long",
+  "beard": null,
+  "tee": [
+   0.3,
+   0.5,
+   0.35
+  ],
+  "shirt": [
+   0.3,
+   0.5,
+   0.35
+  ],
+  "shirt2": [
+   0.24,
+   0.4,
+   0.27999999999999997
+  ],
+  "hair_col": [
+   0.75,
+   0.55,
+   0.3
+  ],
+  "skin": [
+   0.86,
+   0.66,
+   0.54
+  ],
+  "open_shirt": false
+ },
+ "pills": [
+  [
+   "verschenken",
+   "GESCHENK-IDEE?",
+   "#555555"
+  ],
+  [
+   "Bienen",
+   "WIE VON DEN BIENEN",
+   "#e8a317"
+  ]
+ ],
+ "card_lines": [
+  "Honig direkt in der Wabe",
+  "22,00 €"
+ ],
+ "end_sub": "22,00 €",
+ "out": "32_wabe_3d.mp4",
+ "card_title": "WABENHONIG",
+ "deal": "BLACK FRIDAY DEAL",
+ "frames": "0-321"
+}

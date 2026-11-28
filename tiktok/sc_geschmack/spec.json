@@ -1,0 +1,70 @@
+{
+ "id": "geschmack",
+ "n": 23,
+ "title": "GESCHMACKSBOMBE",
+ "badge": "GESCHMACKSBOMBE · BANANENSPLIT",
+ "voice_id": "XcorKvP1KdIM2TL5vtZ1",
+ "voice": "[excited] Die Geschmacksbombe, Bananensplit! [sighs] Mein Quark war einfach traurig. [excited] Ein Löffel Geschmacksbombe rein, und er schmeckt wie Eisdiele! Gerade nur 11,40 Euro. Tipp unten links!",
+ "kw": {
+  "problem": "Mein",
+  "use": "Ein",
+  "price": "Gerade",
+  "cta": "Tipp"
+ },
+ "room": "kitchen",
+ "mood": "sad",
+ "action": "pour",
+ "container": "bowl",
+ "liquid": "#f3efe6",
+ "particle": "#f0d060",
+ "accent": "#f0b020",
+ "h": 0.18,
+ "price": "11,40 €",
+ "char": {
+  "female": false,
+  "hair": "short",
+  "beard": "stubble",
+  "tee": [
+   0.93,
+   0.92,
+   0.88
+  ],
+  "shirt": [
+   0.25,
+   0.3,
+   0.55
+  ],
+  "hair_col": [
+   0.15,
+   0.09,
+   0.05
+  ],
+  "skin": [
+   0.82,
+   0.6,
+   0.47
+  ],
+  "open_shirt": true
+ },
+ "pills": [
+  [
+   "traurig",
+   "TRAURIGER QUARK",
+   "#555555"
+  ],
+  [
+   "Eisdiele",
+   "WIE EISDIELE!",
+   "#f0b020"
+  ]
+ ],
+ "card_lines": [
+  "Geschmackspulver, z. B. Bananensplit",
+  "nur 11,40 €"
+ ],
+ "end_sub": "NUR 11,40 €",
+ "out": "23_geschmack_3d.mp4",
+ "card_title": "GESCHMACKSBOMBE",
+ "deal": "BLACK FRIDAY DEAL",
+ "frames": "0-294"
+}

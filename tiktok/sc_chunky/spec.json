@@ -1,0 +1,82 @@
+{
+ "id": "chunky",
+ "n": 18,
+ "title": "CHUNKY FLAVOUR",
+ "badge": "MORE NUTRITION · STEVIA CHUNKY FLAVOUR",
+ "voice_id": "mPoK2MnknRxMK1ue0VTP",
+ "voice": "[excited] More Stevia Chunky Flavour! [sighs] Mein Quark schmeckt nach... nichts. [excited] Ein Löffel Chunky drüber, und plötzlich schmeckt er nach Dessert! Die Sorte kannst du wählen. Gerade nur 11,39 Euro statt 11,99! Tipp unten links!",
+ "kw": {
+  "problem": "Mein",
+  "use": "Ein",
+  "price": "Gerade",
+  "cta": "Tipp"
+ },
+ "room": "kitchen",
+ "mood": "sad",
+ "action": "pour",
+ "container": "bowl",
+ "liquid": "#f5f1e8",
+ "particle": "#e05a6a",
+ "accent": "#e0506a",
+ "h": 0.2,
+ "price": "11,39 €",
+ "old": "11,99 €",
+ "pct": "-5 %",
+ "char": {
+  "female": true,
+  "hair": "long",
+  "beard": null,
+  "tee": [
+   0.95,
+   0.75,
+   0.3
+  ],
+  "shirt": [
+   0.95,
+   0.75,
+   0.3
+  ],
+  "shirt2": [
+   0.76,
+   0.6000000000000001,
+   0.24
+  ],
+  "hair_col": [
+   0.55,
+   0.38,
+   0.2
+  ],
+  "skin": [
+   0.86,
+   0.66,
+   0.54
+  ],
+  "open_shirt": false
+ },
+ "pills": [
+  [
+   "nichts",
+   "LANGWEILIG…",
+   "#555555"
+  ],
+  [
+   "Dessert",
+   "SCHMECKT NACH DESSERT",
+   "#e0506a"
+  ],
+  [
+   "Sorte",
+   "SORTE WÄHLBAR",
+   "#333333"
+  ]
+ ],
+ "card_lines": [
+  "Topping für Quark & Joghurt",
+  "Jetzt 11,39 € statt 11,99 €"
+ ],
+ "end_sub": "NUR 11,39 € STATT 11,99 €",
+ "out": "18_chunky_3d.mp4",
+ "card_title": "CHUNKY FLAVOUR",
+ "deal": "BLACK FRIDAY DEAL",
+ "frames": "0-387"
+}

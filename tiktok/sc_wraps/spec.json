@@ -1,0 +1,69 @@
+{
+ "id": "wraps",
+ "n": 28,
+ "title": "HIGH PROTEIN WRAPS",
+ "badge": "INLEAD · HIGH PROTEIN WRAPS",
+ "voice_id": "ucRSf046SQyHREQLH4JR",
+ "voice": "[excited] Inlead High Protein Wraps! [sighs] Mittagspause, aber nur zehn Minuten Zeit? [excited] Sechs vegane Wraps, 21 Gramm Protein: füllen, rollen, reinbeißen! Und das für nur 4,99 Euro! Tipp unten links!",
+ "kw": {
+  "problem": "Mittagspause",
+  "use": "6",
+  "price": "Und",
+  "cta": "Tipp"
+ },
+ "room": "office",
+ "mood": "tired",
+ "action": "show",
+ "accent": "#1aa39a",
+ "h": 0.28,
+ "thick": 0.05,
+ "round": 0.3,
+ "price": "4,99 €",
+ "char": {
+  "female": false,
+  "hair": "short",
+  "beard": "stubble",
+  "tee": [
+   0.95,
+   0.95,
+   0.95
+  ],
+  "shirt": [
+   0.3,
+   0.35,
+   0.45
+  ],
+  "hair_col": [
+   0.15,
+   0.09,
+   0.05
+  ],
+  "skin": [
+   0.82,
+   0.6,
+   0.47
+  ],
+  "open_shirt": true
+ },
+ "pills": [
+  [
+   "10",
+   "NUR 10 MINUTEN?",
+   "#555555"
+  ],
+  [
+   "Protein",
+   "21 G PROTEIN · VEGAN",
+   "#1aa39a"
+  ]
+ ],
+ "card_lines": [
+  "6 vegane Wraps · 21 g Protein",
+  "nur 4,99 €"
+ ],
+ "end_sub": "NUR 4,99 €",
+ "out": "28_wraps_3d.mp4",
+ "card_title": "HIGH PROTEIN WRAPS",
+ "deal": "BLACK FRIDAY DEAL",
+ "frames": "0-337"
+}

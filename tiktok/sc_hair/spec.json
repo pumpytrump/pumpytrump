@@ -1,0 +1,70 @@
+{
+ "id": "hair",
+ "n": 29,
+ "title": "HAIR SERUM",
+ "badge": "HAIR SERUM · BIOTIN & ROSMARIN",
+ "voice_id": "JuAR5aASfomx0YTiNRiF",
+ "voice": "[excited] Das Hair Serum mit Biotin! [sighs] Meine Kopfhaut fühlt sich an wie Wüste. [excited] Also: Rosmarin- und Ginseng-Extrakt, Kollagen und Vitamin B6, einfach einmassieren. Für Männer und Frauen. Gerade nur 19,95 Euro! Tipp unten links!",
+ "kw": {
+  "problem": "Meine",
+  "use": "Also",
+  "price": "Gerade",
+  "cta": "Tipp"
+ },
+ "room": "bath",
+ "mood": "sad",
+ "action": "apply",
+ "particle": "#dff0ff",
+ "accent": "#2c9c6a",
+ "h": 0.28,
+ "thick": 0.05,
+ "round": 0.3,
+ "price": "19,95 €",
+ "char": {
+  "female": false,
+  "hair": "short",
+  "beard": "stubble",
+  "tee": [
+   0.93,
+   0.92,
+   0.88
+  ],
+  "shirt": [
+   0.25,
+   0.5,
+   0.4
+  ],
+  "hair_col": [
+   0.15,
+   0.09,
+   0.05
+  ],
+  "skin": [
+   0.82,
+   0.6,
+   0.47
+  ],
+  "open_shirt": true
+ },
+ "pills": [
+  [
+   "Wüste",
+   "KOPFHAUT = WÜSTE",
+   "#c98a3a"
+  ],
+  [
+   "Rosmarin",
+   "BIOTIN · ROSMARIN · GINSENG",
+   "#2c9c6a"
+  ]
+ ],
+ "card_lines": [
+  "Biotin · Rosmarin · Ginseng",
+  "nur 19,95 €"
+ ],
+ "end_sub": "NUR 19,95 €",
+ "out": "29_hair_3d.mp4",
+ "card_title": "HAIR SERUM",
+ "deal": "BLACK FRIDAY DEAL",
+ "frames": "0-362"
+}

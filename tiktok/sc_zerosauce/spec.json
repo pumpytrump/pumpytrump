@@ -1,0 +1,75 @@
+{
+ "id": "zerosauce",
+ "n": 27,
+ "title": "INLEAD ZERO SAUCEN",
+ "badge": "INLEAD · ZERO SAUCEN",
+ "voice_id": "mPoK2MnknRxMK1ue0VTP",
+ "voice": "[excited] Inlead Zero Saucen! [shocked] Pommes ohne Sauce? Niemals! [excited] Hier: verschiedene Sorten, alle mit zero Zucker. Einfach dippen und genießen. Im Set ab 16,99 Euro! Tipp unten links!",
+ "kw": {
+  "problem": "Pommes",
+  "use": "Hier",
+  "price": "Im",
+  "cta": "Tipp"
+ },
+ "room": "kitchen",
+ "mood": "annoyed",
+ "action": "show",
+ "container": "plate",
+ "accent": "#18a6e0",
+ "h": 0.26,
+ "thick": 0.08,
+ "round": 0.15,
+ "price": "ab 16,99 €",
+ "char": {
+  "female": true,
+  "hair": "long",
+  "beard": null,
+  "tee": [
+   0.9,
+   0.45,
+   0.35
+  ],
+  "shirt": [
+   0.9,
+   0.45,
+   0.35
+  ],
+  "shirt2": [
+   0.7200000000000001,
+   0.36000000000000004,
+   0.27999999999999997
+  ],
+  "hair_col": [
+   0.55,
+   0.38,
+   0.2
+  ],
+  "skin": [
+   0.86,
+   0.66,
+   0.54
+  ],
+  "open_shirt": false
+ },
+ "pills": [
+  [
+   "Niemals",
+   "NIEMALS!",
+   "#d33333"
+  ],
+  [
+   "zero",
+   "ZERO ZUCKER",
+   "#18a6e0"
+  ]
+ ],
+ "card_lines": [
+  "Verschiedene Sorten · zero Zucker",
+  "im Set ab 16,99 €"
+ ],
+ "end_sub": "IM SET AB 16,99 €",
+ "out": "27_zerosauce_3d.mp4",
+ "card_title": "INLEAD ZERO SAUCEN",
+ "deal": "BLACK FRIDAY DEAL",
+ "frames": "0-324"
+}
