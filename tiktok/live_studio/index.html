@@ -103,7 +103,7 @@ body.studio.idle { cursor: none; }
         <span class="pill ai">KI-Host · Max</span>
       </div>
       <div class="ov card" id="card">
-        <div class="k" id="cardK">Deal 1/7</div>
+        <div class="k" id="cardK">Deal 1/16</div>
         <div class="n" id="cardN"></div>
         <div class="s" id="cardS"></div>
         <div class="pr"><span class="old" id="cardOld"></span><span class="new" id="cardNew"></span></div>
@@ -122,7 +122,7 @@ body.studio.idle { cursor: none; }
   <div class="desk">
     <div class="box">
       <h1>Max Live Studio</h1>
-      <p class="lead">Max stellt deine 7 Black-Friday-Produkte nacheinander vor und fängt danach automatisch wieder von vorne an. Mit den Buttons unten antwortet er sofort auf Fragen aus dem Chat und macht danach an derselben Stelle weiter.</p>
+      <p class="lead">Max stellt deine 16 Black-Friday-Produkte nacheinander vor und fängt danach automatisch wieder von vorne an. Mit den Buttons unten antwortet er sofort auf Fragen aus dem Chat und macht danach an derselben Stelle weiter.</p>
     </div>
 
     <div class="box">
@@ -173,12 +173,23 @@ const P = [
   { id:"ic", name:"More Protein Iced Coffee", sub:"Echter Kaffee · ca. 20 g Protein pro Portion", img:"ic", h:.26, old:"", price:"Deal im Shop", badge:"Black Friday" },
   { id:"ly", name:"LYORA Nerion", sub:"Extrait de Parfum · höchste Duftkonzentration", img:"ly", h:.22, old:"", price:"89,89 €", badge:"Deal im Shop" },
   { id:"el", name:"Elusa 501", sub:"Extrait de Parfum · unisex · Orange, Vanille, Gewürze", img:"el", h:.25, old:"", price:"Kauf 3", badge:"-46 %" },
+  { id:"honig", name:"Heiße Liebe Honig", sub:"Honig mit Himbeeren & Bourbon-Vanille · limitierte Edition", img:"honig", h:.2, old:"", price:"Deal im Shop", badge:"Limitiert" },
+  { id:"dessert", name:"More Protein Dessert", sub:"Brownie Style · 23 g Protein pro Portion · vegan", img:"dessert", h:.24, old:"", price:"Deal im Shop", badge:"Black Friday" },
+  { id:"zink", name:"ESN Zink", sub:"25 mg Zinkbisglycinat · 120 vegane Kapseln", img:"zink", h:.25, old:"", price:"Deal im Shop", badge:"Black Friday",
+    notice:"Zink trägt zu einer normalen Funktion des Immunsystems bei. Nahrungsergänzungsmittel. Kein Ersatz für eine ausgewogene, abwechslungsreiche Ernährung." },
+  { id:"d3", name:"ESN Vitamin D3 + K2 Depot", sub:"120 Kapseln pro Dose", img:"d3", h:.26, old:"", price:"Deal im Shop", badge:"Black Friday",
+    notice:"Vitamin D trägt zur normalen Funktion des Immunsystems und der Muskeln bei. Nahrungsergänzungsmittel. Kein Ersatz für eine ausgewogene, abwechslungsreiche Ernährung." },
+  { id:"levlup", name:"LevlUp Gaming Drink", sub:"Zero Zucker · Galaxy, Cola Orange & mehr", img:"levlup", h:.18, old:"", price:"Deal im Shop", badge:"Black Friday" },
+  { id:"schoko", name:"Schokoellsen 4er-Pack", sub:"4 Tafeln à 70 g", img:"schoko", h:.22, old:"", price:"Deal im Shop", badge:"Black Friday" },
+  { id:"snocks", name:"Snocks Boxershorts", sub:"Bio-Baumwolle · im Mehrfachpack", img:"snocks", h:.22, old:"", price:"Deal im Shop", badge:"Black Friday" },
+  { id:"snackbox", name:"Weihnachts-Überraschungsbox", sub:"23 Snacks & Süßigkeiten in einer Box", img:"snackbox", h:.2, old:"", price:"Deal im Shop", badge:"Black Friday" },
+  { id:"zerup", name:"More ZERUP", sub:"0 Zucker · 0 Kalorien · Sorten wählbar", img:"zerup", h:.26, old:"", price:"Deal im Shop", badge:"Black Friday" },
   { id:"d1", name:"More DAILY100", sub:"Monatsbox · 4 Wochen Smoothie-Mix + Vitamine", img:"d1", h:.21, old:"87,99 €", price:"44,00 €", badge:"-50 %",
     notice:"Nahrungsergänzungsmittel. Kein Ersatz für eine ausgewogene, abwechslungsreiche Ernährung." },
 ];
-const SEG = { fangs:"seg_fangs", pro:"seg_pro", tb:"seg_tb", ic:"seg_ic", ly:"seg_ly", el:"seg_el", d1:"seg_d1" };
+const SEG = Object.fromEntries(P.map(p => [p.id, "seg_" + p.id]));
 const TEXT = {
-  intro:"Hallo und herzlich willkommen im Live! Ich bin Max, und auf meinem Tisch liegen heute die besten Black-Friday-Deals, die ich finden konnte. Haarschneider, Parfum, Koffein, Protein-Kaffee... ich stell euch alles vor! Bleibt dran, schreibt eure Fragen in den Chat, und wenn euch was gefällt: Tipp unten links auf den Warenkorb!",
+  intro:"Hallo und herzlich willkommen im Live! Ich bin Max, und auf meinem Tisch liegen heute sechzehn Black-Friday-Deals: Haarschneider, Parfum, Schokolade, Honig, Protein, Vitamine und noch mehr! Ich stell euch alles vor. Schreibt eure Fragen in den Chat, und wenn euch was gefällt: Tipp unten links auf den Warenkorb!",
   seg_fangs:"Produkt Nummer eins: der Suprent FANGS! Das ist ein Profi-Haarschneider mit bis zu 13.000 Umdrehungen pro Minute und KI-Power. Heißt: kein Ziepen, kein Zerren, einfach ein sauberer Fade. Mein Barber hat Urlaub, und ehrlich? Ich hab ihn nicht vermisst. Es gibt ihn in Schwarz-Grün oder in Pink. Und jetzt kommt's: Im Black-Friday-Deal nur 169,99 Euro statt 189,99! Tipp unten links auf den Warenkorb!",
   seg_pro:"Weiter geht's mit dem Suprent Pro! Stellt euch vor: Freitagabend, Date in zehn Minuten, und der Bart sieht aus wie ein Vogelnest. Genau dafür ist der hier: Keramikklinge, komplett kabellos und mit Zero-Gap-Kontur für richtig scharfe Linien. Für Bart, Nacken und Konturen. Gibt's in Silber oder in Orange. Black-Friday-Preis: nur 99,99 Euro statt 113,99! Tipp unten links und hol ihn dir!",
   seg_tb:"Jetzt was für alle Montagsmenschen: FGN Tunnelblick! Das sind Koffein-Pouches. Einfach einen Pouch unter die Lippe, fertig. Pro Pouch 75 Milligramm Koffein, null Nikotin, null Zucker. Perfekt für die Deadline oder die lange Lernsession. Wichtig: erhöhter Koffeingehalt, für Kinder und Schwangere nicht empfohlen. Die Dose kostet 14,99 Euro, und gerade gibt's einen Black-Friday-Deal im Shop. Tipp unten links!",
@@ -186,7 +197,7 @@ const TEXT = {
   seg_ly:"Jetzt wird's elegant. Das hier ist LYORA Nerion, ein Extrait de Parfum. Extrait heißt: die höchste Duftkonzentration. Ein Sprüher, und plötzlich fragt jeder: Was trägst du da? Elegant, edel, unvergesslich. Und schaut euch diesen Flakon an: das perfekte Weihnachtsgeschenk. Oder einfach für dich selbst. Für 89,89 Euro, und den Black-Friday-Deal findest du im Shop. Tipp unten links!",
   seg_el:"Und noch ein Duft: Elusa 501, Extrait de Parfum, unisex. Süß, mit Orange, Vanille und warmen Gewürzen. Riecht wie Weihnachtsmarkt, nur edel! Passt für ihn und für sie. Und jetzt der Deal: Kauf drei und spar 46 Prozent! Perfekt zum Verschenken: einen für dich, zwei unter den Baum. Tipp unten links!",
   seg_d1:"Und zum Schluss mein Preis-Knaller: More DAILY100! Das ist eine Monatsbox für vier Wochen, mit Smoothie-Mix und Vitaminen. Jeden Tag ein Sachet, mit Wasser mixen, trinken, fertig. Psst... und jetzt kommt's: minus 50 Prozent! Statt 87,99 Euro nur 44 Euro! Nahrungsergänzungsmittel, kein Ersatz für eine ausgewogene Ernährung. Tipp unten links und schnapp's dir!",
-  outro:"Das waren alle sieben Deals! Haarschneider, Koffein, Protein-Kaffee, Parfum und Vitamine. Folgt mir, damit ihr keinen Deal verpasst, und teilt das Live mit euren Freunden. Ich fang gleich nochmal von vorne an, also bleibt dran!",
+  outro:"Das waren alle sechzehn Deals! Folgt mir, damit ihr keinen Deal verpasst, und teilt das Live mit euren Freunden. Ich fang gleich nochmal von vorne an, also bleibt dran!",
   fangs_preis:"Der Suprent FANGS kostet im Black-Friday-Deal nur 169,99 Euro statt 189,99! Tipp unten links!",
   fangs_info:"Der FANGS ist ein Profi-Haarschneider mit bis zu 13.000 Umdrehungen pro Minute und KI-Power. Kein Ziepen, sauberer Fade. In Schwarz-Grün oder Pink!",
   pro_preis:"Der Suprent Pro kostet gerade nur 99,99 Euro statt 113,99! Tipp unten links!",
@@ -201,6 +212,33 @@ const TEXT = {
   el_info:"Elusa 501 ist ein Unisex Extrait de Parfum: süß, mit Orange, Vanille und Gewürzen. Riecht wie Weihnachtsmarkt, nur edel!",
   d1_preis:"DAILY100 gibt's gerade mit minus 50 Prozent: nur 44 Euro statt 87,99! Tipp unten links!",
   d1_info:"DAILY100 ist eine Monatsbox für vier Wochen mit Smoothie-Mix und Vitaminen. Jeden Tag ein Sachet mit Wasser mixen. Nahrungsergänzungsmittel, kein Ersatz für eine ausgewogene Ernährung.",
+  seg_honig:"Jetzt wird's süß: Heiße Liebe! Das ist Honig mit Himbeeren und Bourbon-Vanille. Ein Löffel, und meine Freundin sagt plötzlich wieder Schatz. Aufs Brot, in den Joghurt, oder heimlich direkt aus dem Glas. Limitierte Edition, perfekt als Geschenk. Den Black-Friday-Deal findest du im Shop. Tipp unten links!",
+  seg_dessert:"Dessert ohne schlechtes Gewissen? More Protein Dessert, Brownie Style! 23 Gramm Protein pro Portion, und komplett vegan. Einfach anrühren, kurz warten, fertig. Meine Diät schaut einfach weg. Gerade mit Black-Friday-Deal im Shop. Tipp unten links!",
+  seg_zink:"Ich vergess alles, außer meine Zink-Kapsel am Morgen! ESN Zink: 25 Milligramm Zinkbisglycinat, 120 vegane Kapseln in der Dose. Zink trägt zu einer normalen Funktion des Immunsystems bei. Nahrungsergänzungsmittel, kein Ersatz für eine ausgewogene Ernährung. Black-Friday-Deal im Shop. Tipp unten links!",
+  seg_d3:"Deutschland im Winter: grau, nass, null Sonne. Ich seh schon aus wie ein Gespenst. Dafür gibt's ESN Vitamin D3 plus K2 Depot, mit 120 Kapseln pro Dose. Vitamin D trägt zur normalen Funktion des Immunsystems und der Muskeln bei. Nahrungsergänzungsmittel, kein Ersatz für eine ausgewogene Ernährung. Black-Friday-Deal im Shop. Tipp unten links!",
+  seg_levlup:"Gamer, aufgepasst: LevlUp Gaming Drink, zero Zucker! Runde eins: verloren. Runde zwei: verloren. Runde drei: Dose auf, und plötzlich: Sieg! Okay, vielleicht war's nicht nur der Drink. Aber der Geschmack: Galaxy, Cola Orange und mehr. Deal im Shop, Tipp unten links und level up!",
+  seg_schoko:"Schokoellsen! Bei dieser Schokolade wird nicht gelogen. Ich wollte nur ein Stück. Okay, die ganze Tafel. Und die zweite. Darum gibt's die direkt im Viererpack: vier Tafeln je 70 Gramm. Reicht fürs ganze Büro, oder für mich bis zur Mittagspause. Black-Friday-Deal im Shop. Tipp unten links!",
+  seg_snocks:"Snocks Boxershorts aus Bio-Baumwolle! Meine alte Unterhose ist von 2014, die hat mehr Löcher als meine Ausreden. Zeit für ein Upgrade: weich, schwarz, passt zu allem. Gibt's im Mehrfachpack, im Black-Friday-Deal. Tipp unten links, deine Unterhose wird's dir danken!",
+  seg_snackbox:"Das hier ist die weihnachtliche Überraschungsbox: 23 Snacks und Süßigkeiten in einer Box! Eigentlich wollte ich sie verschenken. Dann hab ich reingeschaut. Jetzt ist es ein Geschenk. Für mich. Perfekt zum Verschenken, oder zum Behalten. Black-Friday-Deal im Shop. Tipp unten links!",
+  seg_zerup:"More Zerup! Ein Spritzer, und aus langweiligem Wasser wird Pfirsich-Eistee. Null Zucker, null Kalorien. Mein Wasser hatte noch nie so viel Persönlichkeit. Keine Lust auf Pfirsich? Die Sorte kannst du wählen. Deal im Shop, Tipp unten links!",
+  honig_preis:"Den Heiße-Liebe-Honig gibt's gerade mit Black-Friday-Deal. Den aktuellen Preis siehst du direkt im Shop, Tipp unten links!",
+  honig_info:"Heiße Liebe ist Honig mit Himbeeren und Bourbon-Vanille. Limitierte Edition, und ein richtig schönes Geschenk!",
+  dessert_preis:"Das More Protein Dessert gibt's gerade mit Black-Friday-Deal. Den aktuellen Preis siehst du direkt im Shop, Tipp unten links!",
+  dessert_info:"Das More Protein Dessert im Brownie Style hat 23 Gramm Protein pro Portion und ist komplett vegan. Anrühren, kurz warten, fertig!",
+  zink_preis:"ESN Zink gibt's gerade mit Black-Friday-Deal. Den aktuellen Preis siehst du direkt im Shop, Tipp unten links!",
+  zink_info:"ESN Zink: 25 Milligramm Zinkbisglycinat, 120 vegane Kapseln. Zink trägt zu einer normalen Funktion des Immunsystems bei. Nahrungsergänzungsmittel, kein Ersatz für eine ausgewogene Ernährung.",
+  d3_preis:"ESN Vitamin D3 plus K2 gibt's gerade mit Black-Friday-Deal. Den aktuellen Preis siehst du direkt im Shop, Tipp unten links!",
+  d3_info:"ESN Vitamin D3 plus K2 Depot: 120 Kapseln pro Dose. Vitamin D trägt zur normalen Funktion des Immunsystems und der Muskeln bei. Nahrungsergänzungsmittel, kein Ersatz für eine ausgewogene Ernährung.",
+  levlup_preis:"Den LevlUp Gaming Drink gibt's gerade mit Black-Friday-Deal. Den aktuellen Preis siehst du direkt im Shop, Tipp unten links!",
+  levlup_info:"LevlUp ist ein Gaming Drink mit zero Zucker. Sorten wie Galaxy, Cola Orange und noch mehr!",
+  schoko_preis:"Das Schokoellsen-Viererpack gibt's gerade mit Black-Friday-Deal. Den aktuellen Preis siehst du direkt im Shop, Tipp unten links!",
+  schoko_info:"Schokoellsen gibt's im Viererpack: vier Tafeln je 70 Gramm. Bei dieser Schokolade wird nicht gelogen!",
+  snocks_preis:"Die Snocks Boxershorts gibt's gerade im Mehrfachpack mit Black-Friday-Deal. Den aktuellen Preis siehst du direkt im Shop, Tipp unten links!",
+  snocks_info:"Snocks Boxershorts sind aus Bio-Baumwolle, schön weich und passen zu allem. Gibt's im Mehrfachpack!",
+  snackbox_preis:"Die Weihnachts-Überraschungsbox gibt's gerade mit Black-Friday-Deal. Den aktuellen Preis siehst du direkt im Shop, Tipp unten links!",
+  snackbox_info:"In der Weihnachts-Überraschungsbox sind 23 Snacks und Süßigkeiten. Perfekt zum Verschenken, oder zum Behalten!",
+  zerup_preis:"More Zerup gibt's gerade mit Black-Friday-Deal. Den aktuellen Preis siehst du direkt im Shop, Tipp unten links!",
+  zerup_info:"More Zerup: ein Spritzer ins Wasser, und du hast zum Beispiel Pfirsich-Eistee. Null Zucker, null Kalorien, und die Sorte kannst du wählen!",
   g_hallo:"Hey, willkommen im Live! Schön, dass du da bist. Schreib in den Chat, welches Produkt dich interessiert!",
   g_follow:"Danke fürs Folgen! Ihr seid die Besten!",
   g_gift:"Wow, danke für das Geschenk! Das feiern wir!",
@@ -292,7 +330,7 @@ const prodsEl = $("prods");
 P.forEach((p, i) => {
   const row = document.createElement("div"); row.className = "prod"; row.id = "row-" + p.id;
   row.innerHTML = `<img src="img/${p.img}.png" alt=""><div class="nm">${p.name}<div class="pp">${p.old ? p.old + " → " : ""}${p.price}</div></div>
-  <div class="row"><button class="b" type="button" data-a="show">Vorstellen <kbd>${i+1}</kbd></button><button class="b" type="button" data-a="preis">Preis</button><button class="b" type="button" data-a="info">Info</button></div>`;
+  <div class="row"><button class="b" type="button" data-a="show">Vorstellen${i < 9 ? ` <kbd>${i+1}</kbd>` : ""}</button><button class="b" type="button" data-a="preis">Preis</button><button class="b" type="button" data-a="info">Info</button></div>`;
   row.addEventListener("click", async e => {
     const a = e.target.closest("button")?.dataset.a; if (!a) return;
     await ensureStarted(false);
@@ -346,7 +384,7 @@ document.addEventListener("keydown", e => {
   else if (e.key === "h" || e.key === "H") toggleStudio();
   else if (e.key === "Escape") toggleStudio(false);
   else if (e.key === "n" || e.key === "N") nextProduct();
-  else if (/^[1-7]$/.test(e.key)) { const p = P[+e.key - 1]; ensureStarted(false).then(() => { stop(state.answer); state.answer = null; state.resume = null; startMain(PLAYLIST.indexOf(SEG[p.id])); }); }
+  else if (/^[1-9]$/.test(e.key)) { const p = P[+e.key - 1]; ensureStarted(false).then(() => { stop(state.answer); state.answer = null; state.resume = null; startMain(PLAYLIST.indexOf(SEG[p.id])); }); }
 });
 let idleT; document.addEventListener("mousemove", () => { document.body.classList.remove("idle"); clearTimeout(idleT); idleT = setTimeout(() => document.body.classList.add("idle"), 2000); });
 
@@ -359,7 +397,7 @@ function render() {
     lastKey = key;
     const card = $("card");
     if (p) {
-      $("cardK").textContent = `Deal ${P.indexOf(p) + 1}/7`;
+      $("cardK").textContent = `Deal ${P.indexOf(p) + 1}/${P.length}`;
       $("cardN").textContent = p.name; $("cardS").textContent = p.sub;
       $("cardOld").textContent = p.old; $("cardNew").textContent = p.price; $("cardB").textContent = p.badge;
       card.classList.add("on");
@@ -475,17 +513,18 @@ function ik(S, T, pole) {
 
 // products
 const loader = new THREE.TextureLoader();
-const SLOTS = [[-.62, .2], [-.21, .2], [.21, .2], [.62, .2], [-.42, .58], [0, .6], [.42, .58]];
+const SLOTS = [[-.58, .2], [-.2, .2], [.2, .2], [.58, .2], [-.52, .58], [-.18, .6], [.18, .6], [.52, .58]];
+let tableGroup = 0;
 const prodMeshes = P.map((p, i) => {
   const tex = loader.load(`img/${p.img}.png`, t => { const a = t.image.width / t.image.height; mesh.scale.set(p.h * a, p.h, 1); mesh.userData.aspect = a; });
   tex.encoding = THREE.sRGBEncoding; tex.anisotropy = 8;
   const mat = new THREE.MeshBasicMaterial({ map: tex, transparent: true, alphaTest: .05, toneMapped: false });
   const mesh = new THREE.Mesh(new THREE.PlaneGeometry(1, 1), mat); mesh.scale.set(p.h * .5, p.h, 1);
-  const [x, z] = SLOTS[i]; mesh.position.set(x, TOP + p.h / 2, z); scene.add(mesh);
+  const [x, z] = SLOTS[i % 8]; mesh.position.set(x, TOP + p.h / 2, z); scene.add(mesh);
   const sh = new THREE.Mesh(new THREE.CircleGeometry(1, 32), new THREE.MeshBasicMaterial({ color: "#000", transparent: true, opacity: .28, depthWrite: false }));
   sh.rotation.x = -Math.PI / 2; sh.position.set(x, TOP + .002, z); scene.add(sh);
   let alt = null; if (p.alt) { alt = loader.load(`img/${p.alt}.png`); alt.encoding = THREE.sRGBEncoding; }
-  mesh.userData = { home: mesh.position.clone(), shadow: sh, k: 0, tex, alt, aspect: .5, p };
+  mesh.userData = { home: mesh.position.clone(), shadow: sh, k: 0, tex, alt, aspect: .5, p, g: Math.floor(i / 8), v: i < 8 ? 1 : 0 };
   return mesh;
 });
 const SHOW = new THREE.Vector3(.4, 1.2, .3), SHOW_H = .46;
@@ -524,13 +563,16 @@ function frame() {
 
   // active product
   const ap = key ? prodOfKey(key) : null;
+  if (ap) tableGroup = Math.floor(P.indexOf(ap) / 8);
   prodMeshes.forEach(m => {
     const u = m.userData; const on = ap === u.p;
+    u.v = Math.max(0, Math.min(1, u.v + (u.g === tableGroup ? dt : -dt) / .5)); const vv = ease(u.v);
+    m.visible = u.shadow.visible = vv > .01;
     u.k = Math.max(0, Math.min(1, u.k + (on ? dt : -dt) / .7));
     const k = ease(u.k);
     const sc = sm(1, SHOW_H / u.p.h, k);
-    m.scale.set(u.p.h * u.aspect * sc, u.p.h * sc, 1);
-    const pos = u.home.clone().lerp(SHOW, k); pos.y += Math.sin(k * Math.PI) * .18 + (k > .99 ? Math.sin(T * 1.6) * .012 : 0);
+    m.scale.set(u.p.h * u.aspect * sc * Math.max(vv, k), u.p.h * sc * Math.max(vv, k), 1);
+    const pos = u.home.clone().lerp(SHOW, k); pos.y -= (1 - Math.max(vv, k)) * u.p.h / 2; pos.y += Math.sin(k * Math.PI) * .18 + (k > .99 ? Math.sin(T * 1.6) * .012 : 0);
     m.position.copy(pos); m.rotation.z = k * Math.sin(T * 1.3) * .05; m.rotation.y = k * Math.sin(T * .9) * .18;
     u.shadow.scale.setScalar(u.p.h * u.aspect * .55 * (1 - k * .8) + .01); u.shadow.material.opacity = .28 * (1 - k);
     m.renderOrder = on ? 2 : 1;
