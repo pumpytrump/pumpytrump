@@ -226,30 +226,35 @@ for (const [k, t] of Object.entries(TEXT)) {
 }
 
 // ---------- audio ----------
-let ctx = null, ENV = {}, BUF = {}, loaded = false;
+let ctx = null, ENV = {}, loaded = false;
+const AU = new Audio(); AU.preload = "auto"; AU.playsInline = true; AU.setAttribute("playsinline", "");
+let cur = null;
+AU.addEventListener("ended", () => { const o = cur; if (!o || o.stopped || o.done) return; o.done = true; o.onend && o.onend(); });
+AU.addEventListener("error", () => setStatus("<b>Ton konnte nicht geladen werden.</b> Seite neu laden und nochmal auf Show starten klicken."));
+const AURL = k => "audio/" + k + ".mp3";
 const state = { main: null, answer: null, idx: 0, paused: false, loop: true, gapUntil: 0 };
 async function loadAll() {
-  ctx = new (window.AudioContext || window.webkitAudioContext)();
+  ctx = { ok: true };
+  // unlock the audio element inside the click (needed on iPhone/Safari)
+  AU.src = AURL("g_follow"); AU.muted = true;
+  try { await AU.play(); } catch (e) {}
+  AU.pause(); AU.muted = false;
   setStatus("Lade Stimme…");
   ENV = await (await fetch("envelopes.json")).json();
-  const keys = Object.keys(TEXT);
-  let n = 0;
-  await Promise.all(keys.map(async k => {
-    const ab = await (await fetch("audio/" + k + ".mp3")).arrayBuffer();
-    BUF[k] = await ctx.decodeAudioData(ab);
-    n++; setStatus(`Lade Stimme… ${n}/${keys.length}`);
-  }));
+  Object.keys(TEXT).forEach(k => fetch(AURL(k)).catch(() => {}));
   loaded = true;
 }
 function play(key, offset, onend) {
-  const src = ctx.createBufferSource(); src.buffer = BUF[key]; src.connect(ctx.destination);
-  const o = { key, src, t0: ctx.currentTime - (offset || 0), done: false };
-  src.onended = () => { if (o.stopped) return; o.done = true; onend && onend(); };
-  src.start(0, offset || 0);
+  if (cur && !cur.done) cur.stopped = true;
+  const o = { key, onend, done: false }; cur = o;
+  AU.src = AURL(key);
+  const go = () => { if (cur !== o) return; if (offset) { try { AU.currentTime = offset; } catch (e) {} }
+    const p = AU.play(); if (p) p.catch(() => setStatus("<b>Ton blockiert.</b> Klick nochmal auf Show starten.")); };
+  if (offset) AU.addEventListener("loadedmetadata", go, { once: true }); else go();
   return o;
 }
-function stop(o) { if (o && !o.done) { o.stopped = true; try { o.src.stop(); } catch (e) {} } }
-const elapsed = o => ctx.currentTime - o.t0;
+function stop(o) { if (o && !o.done) { o.stopped = true; if (cur === o) AU.pause(); } }
+const elapsed = o => (cur === o ? AU.currentTime : 0);
 
 function startMain(i, offset) {
   state.idx = (i + PLAYLIST.length) % PLAYLIST.length;
@@ -303,7 +308,6 @@ CHAT.forEach(([k, label]) => {
 });
 async function ensureStarted(begin) {
   if (!loaded) { await loadAll(); }
-  if (ctx.state === "suspended") await ctx.resume();
   $("startOv").hidden = true;
   if (!state.started) { state.started = true; if (begin !== false) startMain(0); }
 }
@@ -316,8 +320,8 @@ $("bStart").onclick = startShow;
 $("startOv").onclick = startShow;
 function togglePause() {
   if (!loaded) return;
-  if (state.paused) { state.paused = false; ctx.resume(); }
-  else { state.paused = true; ctx.suspend(); }
+  if (state.paused) { state.paused = false; AU.play().catch(() => {}); }
+  else { state.paused = true; AU.pause(); }
   render();
 }
 $("bPause").onclick = togglePause;
@@ -502,7 +506,7 @@ function frame() {
   // advance playlist after gap
   if (state.pendingNext != null && !state.paused && performance.now() > state.gapUntil && !state.answer) { const n = state.pendingNext; state.pendingNext = null; startMain(n); }
   const o = current(); let amp = 0, frac = 0, key = o ? o.key : null;
-  if (o && ctx && !state.paused) { const t = elapsed(o); const e = ENV[key]; if (e) { amp = e.e[Math.min(e.e.length - 1, Math.max(0, Math.floor(t * 25)))] || 0; frac = t / e.d; } }
+  if (o && ctx) { const t = elapsed(o); const e = ENV[key]; if (e) { amp = state.paused ? 0 : (e.e[Math.min(e.e.length - 1, Math.max(0, Math.floor(t * 25)))] || 0); frac = t / e.d; } }
   // captions
   let cap = ""; if (key && CAPS[key]) { for (const [f, s] of CAPS[key]) if (frac >= f) cap = s; }
   if (cap !== lastCap) { lastCap = cap; $("cap").textContent = cap; }
